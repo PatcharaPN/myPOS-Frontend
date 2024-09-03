@@ -29,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         {isCollapsed ? (
           <div className="sidebar-icon">
             <div className="logo">
-              <img width={60} src="/public/Logo.svg" alt="" />
+              <img width={60} src="/Logo.svg" alt="" />
             </div>
             {menuItems.map((item, index) => (
               <Icon
@@ -44,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         ) : (
           <div className="content">
             <div className="logo">
-              <img width={130} src="/public/Logo.svg" alt="" />
+              <img width={130} src="/Logo.svg" alt="" />
             </div>
             <MenuList isCollapsed={false} />
           </div>
@@ -54,11 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         <p>1.0.0-beta.4</p>
         <div className="Donate-me">
           <button className="btn-donate">
-            <img
-              src="../../../public/assets/Buy Me a Coffee Icon.png"
-              width={30}
-              alt=""
-            />
+            <img src="/assets/Buy Me a Coffee Icon.png" width={30} alt="" />
             Buy me a Coffee
           </button>
         </div>
