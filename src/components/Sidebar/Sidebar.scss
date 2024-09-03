@@ -1,0 +1,95 @@
+$background: #16161a;
+$button: #7f5af0;
+$secondary: #72757e;
+$tertiary: #2db67d;
+$paragraph: #94a1b2;
+$background: #16161a;
+.sidebar {
+  position: fixed;
+  width: 320px;
+  height: 100vh; // กำหนดความสูงให้เต็มหน้าจอ
+  transition: width 0.3s;
+  background-color: $background;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  z-index: 999;
+  top: 0;
+  left: 0; // ตำแหน่งขวาให้ติดขอบขวาของหน้าจอ
+}
+.sidebar.collapsed {
+  width: 80px;
+  .version {
+    display: none;
+  }
+}
+
+.logo {
+  display: flex;
+  margin-bottom: 10%;
+  height: 20%;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-relative {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar-toggle {
+  z-index: 20;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.sidebar-content {
+  padding: 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.version {
+  color: #2db67d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  flex-shrink: 0;
+}
+.btn-donate {
+  all: unset;
+  padding: 0.3rem;
+  width: fit-content;
+  border-radius: 1rem;
+  background-color: #feed00;
+  color: #16161a;
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  font-size: 0.8rem;
+  gap: 5px;
+}
+@media (max-width: 479px) {
+  .sidebar {
+    overflow: hidden;
+    z-index: 10;
+    position: fixed;
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .sidebar {
+    display: hidden;
+    overflow: hidden;
+    z-index: 10;
+    position: fixed;
+    display: none;
+  }
+}

@@ -1,0 +1,33 @@
+.input-selector {
+  display: grid;
+  grid-template-columns: 0.25fr 1fr;
+  align-items: center;
+  position: relative;
+  p {
+    font-weight: 500;
+  }
+
+  .input-select {
+    padding: 12px;
+    width: 100%;
+    max-width: 260px;
+    background-color: transparent;
+    background: url("../../../../public/assets/Selecter.svg") no-repeat right
+      8px center;
+    font-size: 14px;
+    border: solid 1px #94a1b2;
+    border-radius: 8px;
+    outline: none;
+    appearance: none;
+    transition: border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+
+    &:focus {
+      border-color: #7f5af0;
+    }
+  }
+}
+.input-selector-container {
+  position: relative;
+}

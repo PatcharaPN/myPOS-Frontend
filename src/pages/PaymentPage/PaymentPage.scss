@@ -1,0 +1,117 @@
+.paymentmenu-wrapper {
+  padding: 10px;
+}
+.paymentmenu {
+  border: solid 2px #94a1b2;
+  width: 100%;
+  height: 90vh;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.payment-result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-size: 20px;
+  }
+}
+.check-icon {
+  color: #1edb8c;
+  margin-bottom: 40px;
+}
+.product-information {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.item-editmenu {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.complete-text {
+  font-weight: bold;
+}
+.flex-product-info {
+  p {
+    font-size: 1rem;
+  }
+}
+.back-btn {
+  padding: 1rem 3rem;
+  font-size: 1.3rem;
+  background-color: #7f5af0;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+}
+.back-btn:hover {
+  color: #000;
+  background-color: #5f42b6;
+  transition-duration: 500ms;
+}
+.download-receipt {
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+
+  padding: 1rem;
+  font-size: 16px;
+  color: #000;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s;
+}
+.flex-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.logo-receipt {
+  display: none;
+}
+@media print {
+  .flex-btn-group {
+    display: none;
+  }
+
+  .paymentmenu {
+    border: none;
+  }
+
+  .check-icon {
+    margin-bottom: 20px;
+  }
+  .logo-receipt {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    margin-bottom: 5rem;
+    img {
+      width: 150px;
+    }
+  }
+  .icon-operation {
+    display: none;
+  }
+  .paymentmenu-wrapper {
+    background: white;
+    padding: 20px;
+    font-size: 16px;
+    width: 100%;
+  }
+}

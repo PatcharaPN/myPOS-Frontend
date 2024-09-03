@@ -1,0 +1,21 @@
+.notfound-container {
+  border: solid 2px #94a1b2;
+  width: 100%;
+  height: 90vh;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.img-section {
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Notfound-image {
+  opacity: 65%;
+}

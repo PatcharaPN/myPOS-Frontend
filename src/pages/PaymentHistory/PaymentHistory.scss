@@ -1,0 +1,43 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+}
+.pagination-btn {
+  border-radius: 50%;
+  padding: 5px;
+  color: #ffffff;
+  border: none;
+  background-color: #b298ff;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.layout-table {
+  display: flex;
+  height: 68vh;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.status-banner {
+  border: #a1e7a1 solid 1px;
+  border-radius: 2rem;
+  width: fit-content;
+  padding: 0.6rem;
+  font-weight: bolder;
+  font-size: 0.8rem;
+  color: #1c901c;
+  background-color: #c2ffda;
+}
+@media (max-width: 479px) {
+  .layout-table {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
