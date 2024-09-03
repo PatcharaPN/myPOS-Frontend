@@ -4,7 +4,6 @@ const PriceAPI = `${serviceURL}/api/price`;
 const Loginhistory = `${serviceURL}/api/login`;
 const FetchStore = `${serviceURL}/api/store`;
 const FetchBrand = `${serviceURL}/api/brand`;
-const CreateStore = `${serviceURL}/api/Store`;
 
 export const fetchPrice = async () => {
   try {

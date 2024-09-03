@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import { login } from "../services/authService";
 import { getLoginHistory } from "../services/ApiService";
 import { User } from "../types/interface";
@@ -9,9 +8,6 @@ import axios, { AxiosError } from "axios";
 const storedUser = localStorage.getItem("currentUser");
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
 
-interface DecodedToken {
-  exp: number;
-}
 interface ErrorResponse {
   message: string;
 }
@@ -29,26 +25,7 @@ export interface History {
   userAgent: string;
 }
 
-const getTokenExpired = (token: string): Date | null => {
-  try {
-    const decoded: DecodedToken = jwtDecode(token);
-    const expirationDate = new Date(decoded.exp * 1000);
-    return expirationDate;
-  } catch (error) {
-    console.error("Failed to decode token", error);
-    return null;
-  }
-};
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const isTokenValid = (): boolean => {
-  const token = Cookies.get("accessToken");
-  if (!token) {
-    return false;
-  }
-  const expirationDate = getTokenExpired(token);
-  return expirationDate ? expirationDate > new Date() : false;
-};
 
 const initialState = {
   currentUser: storedUser ? JSON.parse(atob(storedUser)) : null,

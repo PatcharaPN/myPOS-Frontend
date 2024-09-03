@@ -12,7 +12,6 @@ import {
   PointElement,
 } from "chart.js";
 import axios from "axios";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 // Register Chart.js components

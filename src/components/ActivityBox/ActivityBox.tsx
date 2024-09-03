@@ -1,7 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import "./ActivityBox.scss";
-import Divider from "../Divider/Divider";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 type ActivityProps = {
