@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
 import ContainerData from "../../components/ContainerData/ContainerData";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 import { getPackage } from "../../features/packageSlice";
+import { useEffect } from "react";
 
-const MockPackage = [
-  { id: "01", name: "Lego-Box", owner: "Sommhai", date: "12-01-67" },
-];
 const Package = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [listpackage, setPackage] = useState(MockPackage);
   const dispatch = useAppDispatch();
   const packagelist = useAppSelector(
-    (state: RootState) => state.package.products,
+    (state: RootState) => state.package.products
   );
 
   useEffect(() => {

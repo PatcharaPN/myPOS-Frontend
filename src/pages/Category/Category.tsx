@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./Category.scss";
-import Divider from "../../components/Divider/Divider";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 import { createCategory, getCategory } from "../../features/CategorySlice";

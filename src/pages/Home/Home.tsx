@@ -18,7 +18,7 @@ import { getAmountCustomer } from "../../features/customerSlice";
 const Home = () => {
   const { t } = useTranslation();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [newProducts, setNewProducts] = useState<Product[]>([]);
+  const [, setNewProducts] = useState<Product[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const amountCustomer = useAppSelector(

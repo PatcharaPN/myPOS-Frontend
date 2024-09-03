@@ -18,12 +18,12 @@ const Sellpage = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   const user = useAppSelector((state: RootState) => state.auth.currentUser);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
   const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
 
   const dispatch = useAppDispatch();
   const categories = useAppSelector(
-    (state: RootState) => state.category.category,
+    (state: RootState) => state.category.category
   );
   const products = useAppSelector((state: RootState) => state.product.products);
   const cart = useAppSelector((state: RootState) => state.cart.items);
@@ -54,7 +54,7 @@ const Sellpage = () => {
   const subtotal = useMemo(() => {
     return cart.reduce(
       (acc, item) => acc + item.product.price * item.quantity,
-      0,
+      0
     );
   }, [cart]);
 

@@ -11,8 +11,6 @@ type InputProps = {
 
 const TextAreaInput: React.FC<InputProps> = ({
   label,
-  type = "text",
-  placeholder,
   required = false,
   value,
   onChange,

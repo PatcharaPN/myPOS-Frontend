@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import "./Modal.scss";
-import { Icon } from "@iconify/react/dist/iconify.js";
 
 type ModalProps = {
   header: string;
@@ -8,7 +7,7 @@ type ModalProps = {
   onClose: () => void;
 };
 
-const Modal: React.FC<ModalProps> = ({ children, onClose, header }) => {
+const Modal: React.FC<ModalProps> = ({ children, header }) => {
   return (
     <div className="modal-backdrop">
       <div className="modal-content">

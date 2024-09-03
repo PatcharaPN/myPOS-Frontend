@@ -22,7 +22,7 @@ const Header: React.FC<MenuListProps> = ({ isCollapsed }) => {
   };
   const navigate = useNavigate();
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
+    (state: RootState) => state.auth.currentUser
   );
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -41,10 +41,6 @@ const Header: React.FC<MenuListProps> = ({ isCollapsed }) => {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("accessToken");
     navigate("/login");
-  };
-
-  const toggleMenu = (index: number) => {
-    setExpandedMenus((prev) => (prev === index ? null : index));
   };
 
   const handleMenuClick = (item: any, index: number) => {

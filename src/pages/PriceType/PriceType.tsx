@@ -3,7 +3,6 @@ import ContainerData from "../../components/ContainerData/ContainerData";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
 import { createPrice, getPrice } from "../../features/PriceSlice";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import CustomInput from "../../components/Input/Input";

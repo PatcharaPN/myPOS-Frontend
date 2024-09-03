@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import "./PaymentPage.scss";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useAppDispatch, useAppSelector } from "../../store/store";

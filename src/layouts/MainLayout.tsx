@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./MainLayout.scss";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
 
 type MainLayoutProps = {
   children?: React.ReactNode;
@@ -19,7 +18,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
 
       <main className="main-content">
-        <Header />
+        <Header isCollapsed={false} />
         {children}
       </main>
     </div>

@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import "./ContainerData.scss";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Divider from "../Divider/Divider";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 
@@ -19,7 +18,6 @@ type ContainerProps = {
 };
 
 const ContainerData: React.FC<ContainerProps> = ({
-  path,
   children,
   pagename,
   pagenameContainer = true,

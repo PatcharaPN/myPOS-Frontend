@@ -5,22 +5,17 @@ import ContainerData from "../../components/ContainerData/ContainerData";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 import { createStore, getAllStore } from "../../features/StoreSlice";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import TableComponent from "../../components/TableContainer/TableContainer";
-import Modal from "../../components/Modal/Modal";
-import SelectInput from "../../components/Input/Selecter/Selecter";
 import CustomInput from "../../components/Input/Input";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
-
-const products: any = [];
 
 const Store = () => {
   const { t } = useTranslation(); // Get translation function
 
   const store = useAppSelector((state: RootState) => state.store.store);
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
+    (state: RootState) => state.auth.currentUser
   );
 
   const dispatch = useAppDispatch();
@@ -40,33 +35,6 @@ const Store = () => {
     dispatch(getAllStore());
   }, [dispatch]);
 
-  const [selectedItems, setSelectedItems] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [selectAll, setSelectAll] = useState(false);
-
-  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked;
-    setSelectAll(isChecked);
-    setSelectedItems(() =>
-      products.reduce(
-        (acc: any, item: any) => {
-          acc[item.id] = isChecked;
-          return acc;
-        },
-        {} as { [key: string]: boolean },
-      ),
-    );
-  };
-
-  const handleCheckboxChange = (id: string) => {
-    setSelectedItems((prevItems) => {
-      const updatedItems = { ...prevItems, [id]: !prevItems[id] };
-      setSelectAll(Object.values(updatedItems).every(Boolean));
-      return updatedItems;
-    });
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -78,7 +46,7 @@ const Store = () => {
     dispatch(createStore(storeData));
   };
   const filteredStore = store.filter((str) =>
-    str.storename.toLowerCase().includes(searchTerm.toLowerCase()),
+    str.storename.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

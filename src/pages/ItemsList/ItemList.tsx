@@ -46,13 +46,13 @@ const ItemList = () => {
   const products = useAppSelector((state: RootState) => state.product.products);
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
+    (state: RootState) => state.auth.currentUser
   );
 
   const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
   const store = useAppSelector((state: RootState) => state.store.store);
   const category = useAppSelector(
-    (state: RootState) => state.category.category,
+    (state: RootState) => state.category.category
   );
   const brand = useAppSelector((state: RootState) => state.product.brand);
 
@@ -65,7 +65,7 @@ const ItemList = () => {
   const [stock, setStock] = useState("");
   const [currentpage, setCurrentpage] = useState<number>(1);
   const itemPerPage = 7;
-  const [available, setAvailable] = useState("1");
+  const [available] = useState("1");
   const [categoryType, setcategoryType] = useState("");
   const [manufacturer, setmanufacturer] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -75,14 +75,13 @@ const ItemList = () => {
   const [currency, setCurrency] = useState("");
   const [currentProduct, setcurrentProduct] = useState<Product | any>();
   const currentcy = useAppSelector((state: RootState) => state.price.price);
-  const [search, setSearch] = useState("");
   const [selectedItem, setSelectedItem] = useState<Set<string>>(new Set());
   const indexOfLastPayment = currentpage * itemPerPage;
   const indexOfFirstPayment = indexOfLastPayment - itemPerPage;
   const [searchTerm, setSerchTerm] = useState("");
   const currentProducts = products.slice(
     indexOfFirstPayment,
-    indexOfLastPayment,
+    indexOfLastPayment
   );
   useEffect(() => {
     dispatch(getAllProducts());
@@ -159,40 +158,6 @@ const ItemList = () => {
       console.error("Error adding item", error);
     }
   };
-  const handleUpdate = async (id: string) => {
-    console.log(selectedStore);
-    const formData = new FormData();
-    formData.append("name", itemName);
-    formData.append("unit", unit);
-    formData.append("sku", sku);
-    formData.append("store", selectedStore);
-    formData.append("weight", weight);
-    formData.append("weightunit", weightUnit);
-    formData.append("category", categoryType);
-    formData.append("brand", selectedBrand);
-    formData.append("price", priceValue);
-    formData.append("priceunit", currency);
-    formData.append("manufacturer", manufacturer);
-    formData.append("stock", stock);
-    formData.append("available", available);
-    formData.append("createdBy", currentUser._id);
-    if (image) {
-      formData.append("productImage", image);
-    }
-
-    try {
-      const result = await axios.put(
-        `(${serviceURL}/api/products/${id}`,
-        formData,
-      );
-
-      console.log(formData);
-      setOpenModel(false);
-      dispatch(getAllProducts());
-    } catch (error) {
-      console.error("Error adding item", error);
-    }
-  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImage(e.target.files[0]);
@@ -241,7 +206,7 @@ const ItemList = () => {
     }
   }, []);
   const filteredProducts = currentProducts.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;

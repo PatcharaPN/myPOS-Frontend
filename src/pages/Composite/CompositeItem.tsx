@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ContainerData from "../../components/ContainerData/ContainerData";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion } from "framer-motion";

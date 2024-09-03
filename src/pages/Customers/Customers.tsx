@@ -9,9 +9,7 @@ import { createCustomer, getAllCustomer } from "../../features/customerSlice";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import CustomInput from "../../components/Input/Input";
 
-type Props = {};
-
-const Customers = (props: Props) => {
+const Customers = () => {
   const customer = useAppSelector(
     (state: RootState) => state.customer.customer
   );

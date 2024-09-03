@@ -13,7 +13,7 @@ export interface Customer {
 export interface CustomerState {
   customer: Customer[];
   error: string | null;
-  totalcustomer: 0;
+  totalcustomer: number;
   loading: boolean;
 }
 const initialState: CustomerState = {
@@ -29,7 +29,7 @@ export const createCustomer = createAsyncThunk<
   try {
     const response = await axios.post<Customer>(
       `${serviceURL}/api/Customer`,
-      customerData,
+      customerData
     );
     return response.data;
   } catch (error: any) {
@@ -57,13 +57,13 @@ export const getAmountCustomer = createAsyncThunk<number>(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get<{ amount: number }>(
-        `${serviceURL}/api/Customer/amount`,
+        `${serviceURL}/api/Customer/amount`
       );
       return response.data.amount;
     } catch (error) {
       return rejectWithValue("Fail to get Amount of Customer");
     }
-  },
+  }
 );
 const customerSlice = createSlice({
   name: "customer",
@@ -78,7 +78,7 @@ const customerSlice = createSlice({
         getAllCustomer.fulfilled,
         (state, action: PayloadAction<Customer[]>) => {
           state.customer = action.payload || [];
-        },
+        }
       )
       .addCase(getAllCustomer.rejected, (state, action) => {
         state.error = action.error as string;
@@ -88,7 +88,7 @@ const customerSlice = createSlice({
         (state, action: PayloadAction<Customer>) => {
           state.customer.push(action.payload);
           state.loading = false;
-        },
+        }
       )
       .addCase(createCustomer.pending, (state) => {
         state.loading = true;
