@@ -12,7 +12,6 @@ import PermissionPage from "../pages/Permission/Permission";
 import Sellpage from "../pages/SellPage/Sellpage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import PaymentHistory from "../pages/PaymentHistory/PaymentHistory";
-import PageTranslate from "../pages/textlanguage/PageTranslate";
 import NotFound from "../pages/NotFound/NotFound";
 import Customers from "../pages/Customers/Customers";
 import LowstockPage from "../pages/LowStock/LowstockPage";
