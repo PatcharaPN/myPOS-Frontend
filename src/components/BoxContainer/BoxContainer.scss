@@ -1,0 +1,10 @@
+$paragraph: #94a1b2;
+.box {
+  border: solid 1px $paragraph;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 20px;
+  display: flex;
+}

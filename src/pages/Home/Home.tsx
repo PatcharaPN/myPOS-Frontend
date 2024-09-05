@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { getAmountCustomer } from "../../features/customerSlice";
+import BoxContainer from "../../components/BoxContainer/BoxContainer";
 //var CanvasJSReact = require('@canvasjs/react-charts');
 
 const Home = () => {
@@ -22,17 +23,17 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const amountCustomer = useAppSelector(
-    (state: RootState) => state.customer.totalcustomer
+    (state: RootState) => state.customer.totalcustomer,
   );
   const amountPayment = useAppSelector(
-    (state: RootState) => state.payment.amount
+    (state: RootState) => state.payment.amount,
   );
   const totalAmount = useAppSelector(
-    (state: RootState) => state.product.totalAmount
+    (state: RootState) => state.product.totalAmount,
   );
   const product = useAppSelector((state: RootState) => state.product.products);
   const lowStockProducts = useAppSelector(
-    (state: RootState) => state.product.lowStock
+    (state: RootState) => state.product.lowStock,
   );
 
   useEffect(() => {
@@ -45,11 +46,11 @@ const Home = () => {
     if (product.length > 0) {
       const lastedSevenday = Date.now() - 7 * 24 * 60 * 60 * 1000;
       const filteredProducts = product.filter(
-        (products) => new Date(products.createdAt).getTime() >= lastedSevenday
+        (products) => new Date(products.createdAt).getTime() >= lastedSevenday,
       );
       const sortedProducts = filteredProducts.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       setNewProducts(sortedProducts.slice(0, 4));
     }
@@ -115,6 +116,34 @@ const Home = () => {
           text={t("activityBox.incomingInvoices")}
         />
       </div>
+      <section>
+        <BoxContainer>
+          <div className="status-indicator">
+            <div>
+              <h1>Product Detail</h1>
+              <div className="indicator-bar">
+                <p>Low stock products</p>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                  <p>0</p>
+                </div>
+              </div>
+              <div className="indicator-bar">
+                <p>Low stock products</p>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                  <p>0</p>
+                </div>
+              </div>
+              <div className="indicator-bar">
+                <p>Low stock products</p>
+                <div style={{ display: "flex", justifyContent: "end" }}>
+                  <p>0</p>
+                </div>
+              </div>
+            </div>
+            <div></div>
+          </div>
+        </BoxContainer>
+      </section>
     </div>
   );
 };
