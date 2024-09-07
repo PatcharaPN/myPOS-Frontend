@@ -14,6 +14,7 @@ import "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { getAmountCustomer } from "../../features/customerSlice";
 import BoxContainer from "../../components/BoxContainer/BoxContainer";
+import PieChart from "../../components/Graph/Pie/PieChart";
 //var CanvasJSReact = require('@canvasjs/react-charts');
 
 const Home = () => {
@@ -116,32 +117,45 @@ const Home = () => {
           text={t("activityBox.incomingInvoices")}
         />
       </div>
-      <section>
-        <BoxContainer>
+      <section style={{ display: "flex", gap: "1rem" }}>
+        <BoxContainer width="50%">
           <div className="status-indicator">
             <div>
-              <h1>Product Detail</h1>
+              <h1>Monthly Analysis</h1>
               <div className="indicator-bar">
-                <p>Low stock products</p>
+                <p>All products</p>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <p>0</p>
                 </div>
               </div>
               <div className="indicator-bar">
-                <p>Low stock products</p>
+                <p>Total payment</p>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <p>0</p>
                 </div>
               </div>
               <div className="indicator-bar">
-                <p>Low stock products</p>
+                <p>Monthly Income</p>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                   <p>0</p>
                 </div>
               </div>
             </div>
-            <div></div>
+            <div>
+              <PieChart />
+            </div>
           </div>
+        </BoxContainer>
+        <BoxContainer width="60%" height="100%">
+          <div className="top-sell-products">
+            <h1>Top Selling Products</h1>
+          </div>
+        </BoxContainer>
+      </section>
+      <section style={{ marginTop: "1rem" }}>
+        <BoxContainer>
+          <h1>Incoming Order</h1>
+          <div className="order-list"></div>
         </BoxContainer>
       </section>
     </div>

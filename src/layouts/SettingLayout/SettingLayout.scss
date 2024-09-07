@@ -1,0 +1,30 @@
+li {
+  list-style: none;
+}
+.layout-setting {
+  padding-top: 4rem;
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 300px auto;
+}
+
+.setting-sidebar {
+  padding: 1rem;
+
+  margin: 1rem;
+  height: calc(100vh - 6rem); /* ลดความสูงของ margin ออกจาก 100vh */
+  background-color: #ffffff;
+  overflow: auto; /* กำหนดให้มีการ scroll ได้ถ้าเนื้อหาเกิน */
+}
+.setting-list {
+  padding: 0.8rem 0.8rem;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.setting-list:hover {
+  background-color: rgba(127, 17, 224, 0.3);
+  transition: 0.3s;
+  color: rgba(255, 255, 255, 1);
+}

@@ -36,7 +36,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/Customers" element={<Customers />} />
       <Route path="/LowStock" element={<LowstockPage />} />
       <Route path="/Package" element={<Package />} />
-      <Route path="/LowStock" element={<LowstockPage />} />
     </Routes>
   );
 };

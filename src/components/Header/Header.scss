@@ -11,10 +11,17 @@ $headerColor: #16161a;
   display: flex;
   width: 100%;
   height: 100%;
-  gap: 20px;
-  justify-content: end;
-  align-items: center;
+  justify-content: space-between;
   color: #ffffff;
+}
+.header-logo {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.user-menu-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 .user-pic {
   display: flex;
@@ -27,6 +34,10 @@ $headerColor: #16161a;
   border-radius: 50%;
   background-color: #9f9f9f;
   font-size: 20px;
+}
+.user-pic:hover {
+  filter: brightness(50%);
+  transition: 0.2s ease-in-out;
 }
 .popover-user {
   display: flex;

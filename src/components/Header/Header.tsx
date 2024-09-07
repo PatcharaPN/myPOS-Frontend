@@ -22,7 +22,7 @@ const Header: React.FC<MenuListProps> = ({ isCollapsed }) => {
   };
   const navigate = useNavigate();
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser
+    (state: RootState) => state.auth.currentUser,
   );
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -102,48 +102,67 @@ const Header: React.FC<MenuListProps> = ({ isCollapsed }) => {
         />
       </div>
       <div className="user-container">
-        <Icon color="#7F5AF0" icon="uil:setting" width={30} />
-        <Icon color="#7F5AF0" icon="material-symbols:mail" width={30} />
-        <select
-          className="language-Change"
-          onChange={handleLanguageChange}
-          value={language}
-        >
-          {languages.map((lang) => (
-            <option key={lang.code} value={lang.code}>
-              {lang.label}
-            </option>
-          ))}
-        </select>
-        <div className="popover-user">
-          <p>
-            {currentUser.username} ({currentUser.role})
-          </p>
-          <Icon
-            onClick={() => setPopover(!isPopover)}
-            icon="iconamoon:arrow-down-2-duotone"
-          />
-        </div>
-        <div className={`popover-menu ${isPopover ? "show" : ""}`}>
-          <ul>
-            <li className="menu" onClick={logout}>
-              <Icon icon="iconamoon:profile" /> Edit Profile
-            </li>
-            <li className="menu" onClick={logout}>
-              <Icon icon="uil:setting" /> Setting
-            </li>
-            <li className="menu" onClick={logout}>
-              <Icon icon="material-symbols:login" /> Log out
-            </li>
-          </ul>
-        </div>
-        <div
-          className="user-pic"
-          style={{
-            border: currentUser.role === "admin" ? "solid 2px #00FF95" : "none",
+        <img
+          onClick={() => {
+            navigate("/");
           }}
-        >
-          {getUserInitials(currentUser.username).toUpperCase()}
+          className="header-logo"
+          src="/Logo.svg"
+          width={50}
+          height={50}
+        />
+        <div className="user-menu-group">
+          <Icon
+            color="#7F5AF0"
+            icon="uil:setting"
+            width={30}
+            onClick={() => {
+              navigate("/Setting/main");
+            }}
+          />
+          <Icon color="#7F5AF0" icon="material-symbols:mail" width={30} />
+          <select
+            className="language-Change"
+            onChange={handleLanguageChange}
+            value={language}
+          >
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.label}
+              </option>
+            ))}
+          </select>
+          <div className="popover-user">
+            <p>
+              {currentUser.username} ({currentUser.role})
+            </p>
+            <Icon
+              onClick={() => setPopover(!isPopover)}
+              icon="iconamoon:arrow-down-2-duotone"
+            />
+          </div>
+          <div className={`popover-menu ${isPopover ? "show" : ""}`}>
+            <ul>
+              <li className="menu" onClick={logout}>
+                <Icon icon="iconamoon:profile" /> Edit Profile
+              </li>
+              <li className="menu" onClick={logout}>
+                <Icon icon="uil:setting" /> Setting
+              </li>
+              <li className="menu" onClick={logout}>
+                <Icon icon="material-symbols:login" /> Log out
+              </li>
+            </ul>
+          </div>
+          <div
+            className="user-pic"
+            style={{
+              border:
+                currentUser.role === "admin" ? "solid 2px #00FF95" : "none",
+            }}
+          >
+            {getUserInitials(currentUser.username).toUpperCase()}
+          </div>
         </div>
       </div>
 

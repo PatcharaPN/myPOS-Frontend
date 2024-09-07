@@ -7,9 +7,10 @@ import Login from "./pages/Login/Login";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { RootState, useAppSelector } from "./store/store";
 import "./i18n";
+import SettingRoute from "./routes/SettingRoutes";
 const App: React.FC = () => {
   const isAuthenticated = useAppSelector(
-    (state: RootState) => state.auth.currentUser !== null
+    (state: RootState) => state.auth.currentUser !== null,
   );
   return (
     <Router>
@@ -22,6 +23,7 @@ const App: React.FC = () => {
             </NoSidebarLayout>
           }
         />
+        <Route path="/Setting/*" element={<SettingRoute />} />
         <Route
           path="*"
           element={
