@@ -15,7 +15,7 @@ const Store = () => {
 
   const store = useAppSelector((state: RootState) => state.store.store);
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser
+    (state: RootState) => state.auth.currentUser,
   );
 
   const dispatch = useAppDispatch();
@@ -46,7 +46,7 @@ const Store = () => {
     dispatch(createStore(storeData));
   };
   const filteredStore = store.filter((str) =>
-    str.storename.toLowerCase().includes(searchTerm.toLowerCase())
+    str.storename.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

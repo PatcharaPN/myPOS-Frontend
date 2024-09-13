@@ -38,8 +38,10 @@ const ActivityBox: React.FC<ActivityProps> = ({
 
   return (
     <div className="box-container">
-      <h1 style={{ color: typeColor }}>{total}</h1>
-      <p>{unit}</p>
+      <div className="type-section">
+        <h1 style={{ color: typeColor }}>{total}</h1>
+        <p>{unit}</p>
+      </div>
       <div className="type-box">
         <Icon icon={icon} />
         <p>{text}</p>

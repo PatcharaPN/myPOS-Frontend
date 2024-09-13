@@ -11,11 +11,11 @@ import { useTranslation } from "react-i18next"; // Import useTranslation hook
 const Category = () => {
   const { t } = useTranslation(); // Destructure t from useTranslation
   const category = useAppSelector(
-    (state: RootState) => state.category.category
+    (state: RootState) => state.category.category,
   );
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser
+    (state: RootState) => state.auth.currentUser,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,7 +44,7 @@ const Category = () => {
     setIsModalOpen(false);
   };
   const filterdCategory = category.filter((cat) =>
-    cat.name.toLowerCase().includes(searchTerm.toLowerCase())
+    cat.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   return (
     <ContainerData

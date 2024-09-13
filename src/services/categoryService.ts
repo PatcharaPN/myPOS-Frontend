@@ -1,6 +1,6 @@
 import axios from "axios";
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-const CATEGORY_URL = `${serviceURL}/api/categories/total`;
+const CATEGORY_URL = `${serviceURL}/api/categories`;
 
 export const getAllCategory = async () => {
   try {

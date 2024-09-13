@@ -32,7 +32,7 @@ const PaymentHistory = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllPayments());
+    dispatch(getAllPayments()).unwrap();
   }, [dispatch]);
 
   if (paymentHistory.length === 0) {
@@ -42,9 +42,12 @@ const PaymentHistory = () => {
       </ContainerData>
     );
   }
-  const filteredHistory = currentPayments.filter((payment) =>
-    payment.createdBy.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredHistory = Array.isArray(currentPayments)
+    ? currentPayments.filter((payment) =>
+        payment.createdBy.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+    : [];
+
   return (
     <ContainerData
       value={searchTerm}

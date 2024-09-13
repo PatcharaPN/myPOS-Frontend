@@ -71,7 +71,7 @@ const Home = () => {
 
   return (
     <div className="menu-container">
-      <div className="dashboard-menu">
+      <div className="activity-menu">
         <ActivityBox
           total={lowStockProducts.length > 0 ? lowStockProducts[0].total : 0}
           unit={t("activityBoxUnit.lowStock")}
@@ -117,45 +117,54 @@ const Home = () => {
           text={t("activityBox.incomingInvoices")}
         />
       </div>
-      <section style={{ display: "flex", gap: "1rem" }}>
-        <BoxContainer width="50%">
-          <div className="status-indicator">
-            <div>
-              <h1>Monthly Analysis</h1>
-              <div className="indicator-bar">
-                <p>All products</p>
-                <div style={{ display: "flex", justifyContent: "end" }}>
-                  <p>0</p>
-                </div>
-              </div>
-              <div className="indicator-bar">
-                <p>Total payment</p>
-                <div style={{ display: "flex", justifyContent: "end" }}>
-                  <p>0</p>
-                </div>
-              </div>
-              <div className="indicator-bar">
-                <p>Monthly Income</p>
-                <div style={{ display: "flex", justifyContent: "end" }}>
-                  <p>0</p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <PieChart />
-            </div>
-          </div>
-        </BoxContainer>
-        <BoxContainer width="60%" height="100%">
-          <div className="top-sell-products">
-            <h1>Top Selling Products</h1>
-          </div>
-        </BoxContainer>
-      </section>
-      <section style={{ marginTop: "1rem" }}>
+      <section className="graph-section">
         <BoxContainer>
-          <h1>Incoming Order</h1>
-          <div className="order-list"></div>
+          <div className="indicator-container">
+            <div className="status-indicator">
+              <div className="indicator-wrapper">
+                <div>
+                  <div className="indicator-bar">
+                    <p>All products</p>
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      <p>0</p>
+                    </div>
+                  </div>
+                  <div className="indicator-bar">
+                    <p>Total payment</p>
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      <p>0</p>
+                    </div>
+                  </div>
+                  <div className="indicator-bar">
+                    <p>Monthly Income</p>
+                    <div style={{ display: "flex", justifyContent: "end" }}>
+                      <p>0</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="pie-wrapper">
+                <PieChart />
+              </div>
+            </div>
+          </div>
+        </BoxContainer>
+        <section className="topsell-container" style={{ marginTop: "1rem" }}>
+          <BoxContainer>
+            <div className="topsell-wrapper">
+              <div className="top-sell-products">
+                <h1>Top Selling Products</h1>
+              </div>
+            </div>
+          </BoxContainer>
+        </section>
+      </section>
+      <section className="order-section" style={{ marginTop: "1rem" }}>
+        <BoxContainer>
+          <div className="order-wrapper">
+            <h1>Incoming Order</h1>
+            <div className="order-list"></div>
+          </div>
         </BoxContainer>
       </section>
     </div>

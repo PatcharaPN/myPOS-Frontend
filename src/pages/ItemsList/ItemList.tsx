@@ -46,13 +46,13 @@ const ItemList = () => {
   const products = useAppSelector((state: RootState) => state.product.products);
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser
+    (state: RootState) => state.auth.currentUser,
   );
 
   const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
   const store = useAppSelector((state: RootState) => state.store.store);
   const category = useAppSelector(
-    (state: RootState) => state.category.category
+    (state: RootState) => state.category.category,
   );
   const brand = useAppSelector((state: RootState) => state.product.brand);
 
@@ -81,7 +81,7 @@ const ItemList = () => {
   const [searchTerm, setSerchTerm] = useState("");
   const currentProducts = products.slice(
     indexOfFirstPayment,
-    indexOfLastPayment
+    indexOfLastPayment,
   );
   useEffect(() => {
     dispatch(getAllProducts());
@@ -206,7 +206,7 @@ const ItemList = () => {
     }
   }, []);
   const filteredProducts = currentProducts.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
@@ -233,7 +233,7 @@ const ItemList = () => {
       <ContainerData
         value={searchTerm}
         onChange={(e) => setSerchTerm(e.target.value)}
-        pagename={"Item"}
+        pagename={t("menuItems.Item")}
         path="/Item/AddItem"
         Canadd={true}
         onClickAdd={handleOpenModal}
@@ -438,92 +438,87 @@ const ItemList = () => {
                         <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>
                       </div>
                     </div>
-                    <div className="item-editmenu">
-                      <Longinput
-                        currency={""}
-                        amount={weight}
-                        label={"Weight"}
-                        value={weightUnit}
-                        options={allweightUnit}
-                        onChange={(e) => setweightUnit(e.target.value)}
-                        onChangeText={(e) => setweight(e.target.value)}
-                      />
+                    <section className="grid-menu-input">
+                      <div className="item-editmenu">
+                        <Longinput
+                          currency={""}
+                          amount={weight}
+                          label={"Weight"}
+                          value={weightUnit}
+                          options={allweightUnit}
+                          onChange={(e) => setweightUnit(e.target.value)}
+                          onChangeText={(e) => setweight(e.target.value)}
+                        />
 
-                      <CustomInput
-                        required={false}
-                        label={"Manufacturer"}
-                        value={manufacturer}
-                        placeholder="Enter manufacturer name"
-                        onChange={(e) => setmanufacturer(e.target.value)}
-                      />
-                      <SelectInput
-                        label={"Brand"}
-                        options={brandOptions}
-                        value={selectedBrand}
-                        onChange={(e) => setSelectedBrand(e.target.value)}
-                        placeholder={"Select Brand"}
-                      />
-                      <SelectInput
-                        label={"Category"}
-                        options={categoryOption}
-                        value={categoryType}
-                        onChange={(e) => setcategoryType(e.target.value)}
-                        placeholder={"Price Type"}
-                      />
-                      <CustomInput
-                        required={false}
-                        label={"Stock amount"}
-                        value={stock}
-                        placeholder="Enter Stock amount Default is 1"
-                        onChange={(e) => {
-                          setStock(e.target.value);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="sale-information">
-                    <div className="sale-section">
-                      <div className="target-selctor">
-                        <input type="checkbox" name="Sale" id="" />
-                        <p>Saler information</p>
+                        <CustomInput
+                          required={false}
+                          label={"Manufacturer"}
+                          value={manufacturer}
+                          placeholder="Enter manufacturer name"
+                          onChange={(e) => setmanufacturer(e.target.value)}
+                        />
+                        <SelectInput
+                          label={"Brand"}
+                          options={brandOptions}
+                          value={selectedBrand}
+                          onChange={(e) => setSelectedBrand(e.target.value)}
+                          placeholder={"Select Brand"}
+                        />
+                        <SelectInput
+                          label={"Category"}
+                          options={categoryOption}
+                          value={categoryType}
+                          onChange={(e) => setcategoryType(e.target.value)}
+                          placeholder={"Price Type"}
+                        />
+                        <CustomInput
+                          required={false}
+                          label={"Stock amount"}
+                          value={stock}
+                          placeholder="Enter Stock amount Default is 1"
+                          onChange={(e) => {
+                            setStock(e.target.value);
+                          }}
+                        />
                       </div>
-
-                      <TextAreaInput label={"Description"} value={""} />
-                      <SelectInput
-                        label={"Taxes"}
-                        options={categoryOption}
-                        value={categoryType}
-                        onChange={(e) => setcategoryType(e.target.value)}
-                        placeholder={"Price Type"}
-                      />
-                    </div>
-                    <div className="sale-section">
-                      <div className="target-selctor">
-                        <input type="checkbox" name="Sale" id="" />
-                        <p>Buyer information</p>
+                      <div className="sale-information">
+                        <div
+                          className="sale-section"
+                          style={{ marginBottom: "1rem" }}
+                        >
+                          <SelectInput
+                            label={"Taxes"}
+                            options={categoryOption}
+                            value={categoryType}
+                            onChange={(e) => setcategoryType(e.target.value)}
+                            placeholder={"Price Type"}
+                          />
+                        </div>
+                        <div className="sale-section">
+                          <CurrencyInput
+                            currency={currentcy[0]?.unit || ""}
+                            options={currencyOption}
+                            value={currency}
+                            amount={priceValue}
+                            label={"Sales Price"}
+                            onChange={(e) => {
+                              setCurrency(e.target.value);
+                            }}
+                            onChangeText={(e) => {
+                              setPriceValue(e.target.value);
+                            }}
+                          />
+                          <SelectInput
+                            label={"Taxes"}
+                            options={categoryOption}
+                            value={categoryType}
+                            onChange={(e) => setcategoryType(e.target.value)}
+                            placeholder={"Price Type"}
+                          />
+                          <TextAreaInput label={"Description"} value={""} />
+                        </div>
                       </div>
-                      <CurrencyInput
-                        currency={currentcy[0]?.unit || ""}
-                        options={currencyOption}
-                        value={currency}
-                        amount={priceValue}
-                        label={"Sales Price"}
-                        onChange={(e) => {
-                          setCurrency(e.target.value);
-                        }}
-                        onChangeText={(e) => {
-                          setPriceValue(e.target.value);
-                        }}
-                      />
-                      <TextAreaInput label={"Description"} value={""} />
-                      <SelectInput
-                        label={"Taxes"}
-                        options={categoryOption}
-                        value={categoryType}
-                        onChange={(e) => setcategoryType(e.target.value)}
-                        placeholder={"Price Type"}
-                      />
-                    </div>
+                    </section>
                   </div>
                   {/*<Longinput
                       currency={""}

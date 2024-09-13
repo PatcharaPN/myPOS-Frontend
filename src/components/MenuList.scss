@@ -1,3 +1,5 @@
+.list-menu {
+}
 .menu-list {
   z-index: 1000;
   ul {
@@ -90,7 +92,14 @@
   color: inherit;
   text-decoration: none;
 }
+.list-menu-mobile {
+  display: none;
+}
+
 @media (max-width: 479px) {
+  .list-menu-mobile {
+    display: inline-block;
+  }
   .menu-list {
     position: relative;
     z-index: 10;
@@ -176,6 +185,9 @@
       color: #ffffff;
       text-decoration: none;
     }
+  }
+  .list-menu {
+    display: none;
   }
 }
 @media (max-width: 768px) {

@@ -1,7 +1,18 @@
+import { useCallback } from "react";
 import BoxContainer from "../../../components/BoxContainer/BoxContainer";
+import {
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+} from "../../../store/store";
 
 import "./MainSetting.scss";
 const MainSetting = () => {
+  const dispatch = useAppDispatch();
+  const fetchCurrentUser = useAppSelector(
+    (state: RootState) => state.auth.currentUser,
+  );
+
   return (
     <>
       <div className="setting-content-layout">

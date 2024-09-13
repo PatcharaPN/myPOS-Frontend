@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getAllCategory } from "../services/categoryService";
 import { Categories, Product, User } from "../types/interface";
 import axios from "axios";
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
 
 export const getCategory = createAsyncThunk("category/getAll", async () => {
   try {
-    const res = await getAllCategory();
+    const res = await axios.get(`${serviceURL}/api/categories`);
     return res;
   } catch (error) {
     console.error("Error when fetching category", error);

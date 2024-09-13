@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 import { Link, useNavigate } from "react-router-dom";
 import i18n from "../../i18n";
-import { menuItems } from "../MenuList";
+import { menuItems, menuItemsMobile } from "../MenuList";
 import { useTranslation } from "react-i18next";
 
 type MenuListProps = {
@@ -169,7 +169,7 @@ const Header: React.FC<MenuListProps> = ({ isCollapsed }) => {
       <div className={`drawer-menu-mobile ${isDrawerOpen ? "open" : ""}`}>
         <div className="menu-list">
           <ul className="menu-ul">
-            {menuItems.map((item, index) => (
+            {menuItemsMobile.map((item, index) => (
               <li
                 key={item.label}
                 className={`menu-item ${

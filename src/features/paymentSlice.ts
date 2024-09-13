@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Product, User } from "../types/interface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
 export type Payment = {
@@ -21,26 +21,31 @@ export type PaymentSummary = {
   totalAmount: number;
   monthName: string;
 };
+interface ErrorResponse {
+  message: string;
+}
 
 export interface PaymentState {
   payments: Payment[]; // Changed to 'payments' to reflect multiple payments
   loading: boolean;
   paymentSummary: PaymentSummary[];
-  amount: Payment | any;
+  amount: number | null;
   error: string | null;
 }
 
 const initialState: PaymentState = {
   payments: [],
   paymentSummary: [],
-  amount: 0,
+  amount: null,
   loading: false,
   error: null,
 };
-
 export const createPayment = createAsyncThunk<
-  Payment,
-  { createdBy: string; products: string[]; status: string } // Updated `products` to be an array of strings
+  Payment, // Success response type
+  { createdBy: string; products: string[]; status: string }, // Input payload
+  {
+    rejectValue: ErrorResponse; // Type for rejected action
+  }
 >("payment/create", async (paymentData, thunkAPI) => {
   try {
     const response = await axios.post<Payment>(
@@ -48,8 +53,18 @@ export const createPayment = createAsyncThunk<
       paymentData,
     );
     return response.data;
-  } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.response?.data || error.message);
+  } catch (error) {
+    // Narrow down the type of the error
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      // Check if the error response exists, otherwise fall back to a default message
+      return thunkAPI.rejectWithValue(
+        axiosError.response?.data || { message: axiosError.message },
+      );
+    } else {
+      // If the error is not an AxiosError, return a generic error
+      return thunkAPI.rejectWithValue({ message: String(error) });
+    }
   }
 });
 export const getPaymentSummary = createAsyncThunk(
@@ -70,21 +85,27 @@ export const getPaymentSummary = createAsyncThunk(
   },
 );
 
-export const getAmountOfPayment = createAsyncThunk(
-  "payment/getAmount",
-  async () => {
-    try {
-      const response = await axios.get<Payment>(
-        `${serviceURL}/api/paymentcount`,
+export const getAmountOfPayment = createAsyncThunk<
+  number | null,
+  void,
+  { rejectValue: ErrorResponse }
+>("payment/getAmount", async (_, thunkAPI) => {
+  try {
+    const response = await axios.get<Payment>(`${serviceURL}/api/paymentcount`);
+    return response.data.amount;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      return thunkAPI.rejectWithValue(
+        axiosError.response?.data || { message: axiosError.message },
       );
-      console.log(response.data);
-
-      return response.data;
-    } catch (error) {
-      console.log(error);
+    } else {
+      return thunkAPI.rejectWithValue({
+        message: String(error),
+      });
     }
-  },
-);
+  }
+});
 
 export const getAllPayments = createAsyncThunk<Payment[]>(
   "payment/getAll", // Updated action type to reflect fetching all payments
@@ -92,8 +113,15 @@ export const getAllPayments = createAsyncThunk<Payment[]>(
     try {
       const response = await axios.get<Payment[]>(`{$serviceURL}/api/payment`);
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ErrorResponse>;
+        return thunkAPI.rejectWithValue(
+          axiosError.response?.data || { message: axiosError.message },
+        );
+      } else {
+        return thunkAPI.rejectWithValue({ message: String(error) });
+      }
     }
   },
 );
@@ -127,10 +155,13 @@ const paymentSlice = createSlice({
       .addCase(getAmountOfPayment.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAmountOfPayment.fulfilled, (state, action) => {
-        state.loading = false;
-        state.amount = action.payload?.amount;
-      })
+      .addCase(
+        getAmountOfPayment.fulfilled,
+        (state, action: PayloadAction<number | null>) => {
+          state.loading = false;
+          state.amount = action.payload; // amount should be number or null
+        },
+      )
       .addCase(getAmountOfPayment.rejected, (state, action) => {
         state.error = action.error as string;
       })

@@ -23,7 +23,7 @@ const Sellpage = () => {
 
   const dispatch = useAppDispatch();
   const categories = useAppSelector(
-    (state: RootState) => state.category.category
+    (state: RootState) => state.category.category,
   );
   const products = useAppSelector((state: RootState) => state.product.products);
   const cart = useAppSelector((state: RootState) => state.cart.items);
@@ -54,7 +54,7 @@ const Sellpage = () => {
   const subtotal = useMemo(() => {
     return cart.reduce(
       (acc, item) => acc + item.product.price * item.quantity,
-      0
+      0,
     );
   }, [cart]);
 
