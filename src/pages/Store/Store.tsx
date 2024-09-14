@@ -143,16 +143,24 @@ const Store = () => {
             </div>
             <div className="additem-form">
               <form className="form-grid">
-                <CustomInput
-                  label={t("name")}
-                  value={storename}
-                  onChange={(e) => setStoreName(e.target.value)}
-                />
-                <CustomInput
-                  label={t("address")}
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
+                  }}
+                >
+                  <CustomInput
+                    label={t("name")}
+                    value={storename}
+                    onChange={(e) => setStoreName(e.target.value)}
+                  />
+                  <CustomInput
+                    label={t("address")}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                </div>
               </form>
             </div>
           </div>

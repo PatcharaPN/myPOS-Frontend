@@ -21,7 +21,7 @@ const Longinput: React.FC<CurrencyInputProps> = ({
   onChangeText,
 }) => {
   return (
-    <div className="label">
+    <div className="label-input">
       <p>{label}</p>
       <div className="currency-input">
         <input

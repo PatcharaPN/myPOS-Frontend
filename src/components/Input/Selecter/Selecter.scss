@@ -1,8 +1,7 @@
 .input-selector {
-  display: grid;
-  grid-template-columns: 0.25fr 1fr;
-  align-items: center;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   p {
     font-weight: 500;
   }
@@ -12,8 +11,7 @@
     width: 100%;
     max-width: 260px;
     background-color: transparent;
-    background: url("../../../../public/assets/Selecter.svg") no-repeat right
-      8px center;
+    background: url("/assets/Selecter.svg") no-repeat right 8px center;
     font-size: 14px;
     border: solid 1px #94a1b2;
     border-radius: 8px;
@@ -27,7 +25,4 @@
       border-color: #7f5af0;
     }
   }
-}
-.input-selector-container {
-  position: relative;
 }

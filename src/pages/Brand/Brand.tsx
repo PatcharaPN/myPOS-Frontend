@@ -7,13 +7,14 @@ import { createBrand, getBrand } from "../../features/ProductSlice";
 import CustomInput from "../../components/Input/Input";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import "./Brand.scss";
 
 const BrandPage = () => {
   const { t } = useTranslation(); // Get translation function
 
   const brand = useAppSelector((state: RootState) => state.product.brand);
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser
+    (state: RootState) => state.auth.currentUser,
   );
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +48,7 @@ const BrandPage = () => {
     setIsModalOpen(false);
   };
   const filteredBrand = brand.filter((brand) =>
-    brand.name.toLowerCase().includes(searchTerm.toLowerCase())
+    brand.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   return (
     <ContainerData
@@ -60,7 +61,7 @@ const BrandPage = () => {
       {isModalOpen && (
         <SmallModal header={t("addBrand")} onClose={handleCloseModal}>
           <div className="modal-wrapper">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="from-input">
               <CustomInput
                 label={t("name")}
                 value={name}

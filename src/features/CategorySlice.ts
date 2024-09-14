@@ -1,22 +1,32 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Categories, Product, User } from "../types/interface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
 
-export const getCategory = createAsyncThunk("category/getAll", async () => {
-  try {
-    const res = await axios.get(`${serviceURL}/api/categories`);
-    return res;
-  } catch (error) {
-    console.error("Error when fetching category", error);
-  }
-});
+interface ErrorResponse {
+  message: string;
+}
+
+export const getCategory = createAsyncThunk<Categories[]>(
+  "category/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`${serviceURL}/api/categories`);
+      return res.data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        axiosError.response?.data || "Fail to get all category",
+      );
+    }
+  },
+);
 
 export const createCategory = createAsyncThunk(
   "product/createBrand",
   async (
     categoryData: { name: string; description: string; createdBy: string },
-    thunkAPI,
+    { rejectWithValue },
   ) => {
     try {
       const response = await axios.post(
@@ -24,8 +34,11 @@ export const createCategory = createAsyncThunk(
         categoryData,
       );
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data || error.message);
+    } catch (error) {
+      const axiosError = error as AxiosError<ErrorResponse>;
+      return rejectWithValue(
+        axiosError.response?.data || "Error when creating category",
+      );
     }
   },
 );

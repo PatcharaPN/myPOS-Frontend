@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"; // Import the hook
 const PriceType = () => {
   const { t } = useTranslation(); // Destructure t from useTranslation hook
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser
+    (state: RootState) => state.auth.currentUser,
   );
   const price = useAppSelector((state: RootState) => state.price.price);
   const [openModal, setOpenModal] = useState(false);
@@ -43,7 +43,7 @@ const PriceType = () => {
     setOpenModal(false);
   };
   const filteredPrice = price.filter((price) =>
-    price.unit.toLowerCase().includes(searchTerm.toLowerCase())
+    price.unit.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   return (
     <div>
@@ -104,7 +104,7 @@ const PriceType = () => {
                     <td>{price.unit}</td>
                     <td>{price.name}</td>
                     <td>{price.description}</td>
-                    <td>{price.addedBy.name}</td>
+                    <td>{price.addedBy?.name}</td>
 
                     <td>
                       <div className="button-section-wrapper">

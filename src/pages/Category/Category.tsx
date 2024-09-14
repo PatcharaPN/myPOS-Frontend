@@ -109,10 +109,10 @@ const Category = () => {
               <td>
                 <input type="checkbox" />
               </td>
-              <td className="table-data">{cat.name}</td>
-              <td>{cat.productCount}</td>
-              <td>{cat.createdBy.name}</td>
-              <td>{cat.createdBy.role}</td>
+              <td className="table-data">{cat.name ?? ""}</td>
+              <td>{cat?.productCount ?? "N/A"}</td>
+              <td>{cat?.createdBy?.name ?? ""}</td>
+              <td>{cat?.createdBy?.role ?? ""}</td>{" "}
               <td className="button-section">
                 <button className="button-action view">
                   <Icon width={20} icon="hugeicons:view" />

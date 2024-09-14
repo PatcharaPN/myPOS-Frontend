@@ -30,18 +30,15 @@
   font-size: 20px;
 }
 .input-layout {
-  display: grid;
-  grid-template-columns: 0.25fr 1fr;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   p {
     font-weight: 500;
   }
 }
 .input-selector {
-  display: grid;
-  grid-template-columns: 0.25fr 1fr;
-  align-items: center;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   p {
     font-weight: 500;
   }
@@ -68,7 +65,6 @@
   }
 }
 .input-selector-container {
-  position: relative;
 }
 .selector {
   height: 30px;

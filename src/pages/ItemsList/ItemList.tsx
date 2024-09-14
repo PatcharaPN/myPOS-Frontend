@@ -173,6 +173,12 @@ const ItemList = () => {
     }
   };
 
+  const handleWeight = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    setweight(e.target.value);
+  };
+
   const handleCloseModal = () => {
     setOpenModel(false);
   };
@@ -233,7 +239,7 @@ const ItemList = () => {
       <ContainerData
         value={searchTerm}
         onChange={(e) => setSerchTerm(e.target.value)}
-        pagename={t("menuItems.Item")}
+        pagename={t("Item")}
         path="/Item/AddItem"
         Canadd={true}
         onClickAdd={handleOpenModal}
@@ -320,8 +326,8 @@ const ItemList = () => {
                         {product.name}
                       </td>
                       <td>{product.productID || ""}</td>
-                      <td>{product.category.name}</td>
-                      <td>{product.createdBy.name}</td>
+                      <td>{product.category?.name}</td>
+                      <td>{product.createdBy?.name}</td>
                       <td>{product.available}</td>
                       <td>{product.reserved}</td>
                       <td>{product.stock}</td>
@@ -382,15 +388,7 @@ const ItemList = () => {
         <Modal header={""} onClose={handleCloseModal}>
           <div className="additem-content">
             <div className="additem-topmenu">
-              <h2 style={{ fontWeight: "bold" }}>New Item</h2>
-              <div className="btn-section">
-                <button className="btn" onClick={handleSubmit}>
-                  Save
-                </button>
-                <button className="btn white" onClick={handleCloseModal}>
-                  Discard
-                </button>
-              </div>
+              <h2 style={{ fontWeight: "bold" }}>{t("newItem")}</h2>
             </div>
             <div className="additem-form">
               <form className="additems-grid">
@@ -398,6 +396,16 @@ const ItemList = () => {
                   <div className="option-1">
                     <div className="name-unit">
                       <div className="input-name-section">
+                        <div className="image-upload-section">
+                          <div className="image-input-border">
+                            <div className="upload-text">
+                              <p>Drag image here</p> <br /> <p>or</p> <br />{" "}
+                              <p style={{ color: "#7F5AF0" }}>Browse Image</p>
+                            </div>
+                            <input type="file" onChange={handleFileChange} />
+                          </div>
+                          <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>
+                        </div>
                         <CustomInput
                           required={true}
                           label={"Name*"}
@@ -426,36 +434,28 @@ const ItemList = () => {
                           onChange={(e) => setSelectedStore(e.target.value)}
                           placeholder={"Select Store"}
                         />
-                      </div>
-                      <div className="image-upload-section">
-                        <div className="image-input-border">
-                          <div className="upload-text">
-                            <p>Drag image here</p> <br /> <p>or</p> <br />{" "}
-                            <p style={{ color: "#7F5AF0" }}>Browse Image</p>
-                          </div>
-                          <input type="file" onChange={handleFileChange} />
-                        </div>
-                        <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>
-                      </div>
-                    </div>
-                    <section className="grid-menu-input">
-                      <div className="item-editmenu">
                         <Longinput
                           currency={""}
                           amount={weight}
                           label={"Weight"}
                           value={weightUnit}
                           options={allweightUnit}
-                          onChange={(e) => setweightUnit(e.target.value)}
-                          onChangeText={(e) => setweight(e.target.value)}
+                          onChange={(e) => setweightUnit(e.target.value)} // For the unit selector
+                          onChangeText={(e) => setweight(e.target.value)} // For the actual weight input
                         />
-
                         <CustomInput
                           required={false}
                           label={"Manufacturer"}
                           value={manufacturer}
                           placeholder="Enter manufacturer name"
                           onChange={(e) => setmanufacturer(e.target.value)}
+                        />
+                        <SelectInput
+                          label={"Taxes"}
+                          options={categoryOption}
+                          value={categoryType}
+                          onChange={(e) => setcategoryType(e.target.value)}
+                          placeholder={"Price Type"}
                         />
                         <SelectInput
                           label={"Brand"}
@@ -471,54 +471,40 @@ const ItemList = () => {
                           onChange={(e) => setcategoryType(e.target.value)}
                           placeholder={"Price Type"}
                         />
-                        <CustomInput
-                          required={false}
-                          label={"Stock amount"}
-                          value={stock}
-                          placeholder="Enter Stock amount Default is 1"
+                        <CurrencyInput
+                          currency={currentcy[0]?.unit || ""}
+                          options={currencyOption}
+                          value={currency}
+                          amount={priceValue}
+                          label={"Sales Price"}
                           onChange={(e) => {
-                            setStock(e.target.value);
+                            setCurrency(e.target.value);
+                          }}
+                          onChangeText={(e) => {
+                            setPriceValue(e.target.value);
                           }}
                         />
-                      </div>
-                      <div className="sale-information">
-                        <div
-                          className="sale-section"
-                          style={{ marginBottom: "1rem" }}
-                        >
-                          <SelectInput
-                            label={"Taxes"}
-                            options={categoryOption}
-                            value={categoryType}
-                            onChange={(e) => setcategoryType(e.target.value)}
-                            placeholder={"Price Type"}
-                          />
-                        </div>
-                        <div className="sale-section">
-                          <CurrencyInput
-                            currency={currentcy[0]?.unit || ""}
-                            options={currencyOption}
-                            value={currency}
-                            amount={priceValue}
-                            label={"Sales Price"}
-                            onChange={(e) => {
-                              setCurrency(e.target.value);
-                            }}
-                            onChangeText={(e) => {
-                              setPriceValue(e.target.value);
-                            }}
-                          />
-                          <SelectInput
-                            label={"Taxes"}
-                            options={categoryOption}
-                            value={categoryType}
-                            onChange={(e) => setcategoryType(e.target.value)}
-                            placeholder={"Price Type"}
-                          />
-                          <TextAreaInput label={"Description"} value={""} />
+                        <SelectInput
+                          label={"Taxes"}
+                          options={categoryOption}
+                          value={categoryType}
+                          onChange={(e) => setcategoryType(e.target.value)}
+                          placeholder={"Price Type"}
+                        />
+                        <TextAreaInput label={"Description"} value={""} />
+                        <div className="btn-section">
+                          <button className="btn" onClick={handleSubmit}>
+                            Save
+                          </button>
+                          <button
+                            className="btn white"
+                            onClick={handleCloseModal}
+                          >
+                            Discard
+                          </button>
                         </div>
                       </div>
-                    </section>
+                    </div>
                   </div>
                   {/*<Longinput
                       currency={""}
@@ -540,178 +526,6 @@ const ItemList = () => {
                 </div>
               </form>
             </div>
-          </div>
-        </Modal>
-      ) : null}
-      {EditModal ? (
-        <Modal header={""} onClose={handleCloseEditModal}>
-          <div className="flex-btn">
-            <h1>Edit item</h1>
-            <div className="btn-section">
-              <button className="btn" onClick={handleSubmit}>
-                Save
-              </button>
-              <button className="btn white" onClick={handleCloseEditModal}>
-                Discard
-              </button>
-            </div>
-          </div>
-          <div className="additem-form">
-            <form className="additems-grid">
-              <div className="create-iten-input">
-                <div className="option-1">
-                  <div className="name-unit">
-                    <div className="input-name-section">
-                      <CustomInput
-                        required={true}
-                        label={"Name*"}
-                        value={itemName}
-                        placeholder={currentProduct?.name}
-                        onChange={(e) => setItemName(e.target.value)}
-                      />{" "}
-                      <SelectInput
-                        label={"Unit"}
-                        options={unitOption}
-                        value={unit}
-                        onChange={(e) => setUnit(e.target.value)}
-                        placeholder={currentProduct?.unit}
-                      />{" "}
-                      <CustomInput
-                        required={false}
-                        label={"SKU"}
-                        value={sku}
-                        placeholder={currentProduct?.sku}
-                        onChange={(e) => setSku(e.target.value)}
-                      />{" "}
-                      <SelectInput
-                        label={"Store"}
-                        options={storeOptions}
-                        value={selectedStore}
-                        onChange={(e) => setSelectedStore(e.target.value)}
-                        placeholder={currentProduct?.store.storename}
-                      />
-                    </div>
-                    <div className="image-upload-section">
-                      <div className="image-input-border">
-                        <img
-                          width={200}
-                          src={`${serviceURL}${currentProduct?.productImage}`}
-                          alt=""
-                        />
-                        <div className="upload-text"></div>
-                        <input type="file" onChange={handleFileChange} />
-                      </div>
-                      <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>
-                    </div>
-                  </div>
-                  <div className="item-editmenu">
-                    <Longinput
-                      placeholder={currentProduct?.weight}
-                      currency={""}
-                      amount={weight}
-                      label={"Weight"}
-                      value={weightUnit}
-                      options={allweightUnit}
-                      onChange={(e) => setweightUnit(e.target.value)}
-                      onChangeText={(e) => setweight(e.target.value)}
-                    />
-
-                    <CustomInput
-                      required={false}
-                      label={"Manufacturer"}
-                      value={manufacturer}
-                      placeholder={currentProduct?.manufacturer}
-                      onChange={(e) => setmanufacturer(e.target.value)}
-                    />
-                    <SelectInput
-                      label={"Brand"}
-                      options={brandOptions}
-                      value={selectedBrand}
-                      onChange={(e) => setSelectedBrand(e.target.value)}
-                      placeholder={currentProduct?.brand.name}
-                    />
-                    <SelectInput
-                      label={"Category"}
-                      options={categoryOption}
-                      value={categoryType}
-                      onChange={(e) => setcategoryType(e.target.value)}
-                      placeholder={"Price Type"}
-                    />
-                    <CustomInput
-                      required={false}
-                      label={"Stock amount"}
-                      value={stock}
-                      placeholder={currentProduct?.stock.toString()}
-                      onChange={(e) => {
-                        setStock(e.target.value);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="sale-information">
-                  <div className="sale-section">
-                    <div className="target-selctor">
-                      <input type="checkbox" name="Sale" id="" />
-                      <p>Saler information</p>
-                    </div>
-
-                    <TextAreaInput label={"Description"} value={""} />
-                    <SelectInput
-                      label={"Taxes"}
-                      options={categoryOption}
-                      value={categoryType}
-                      onChange={(e) => setcategoryType(e.target.value)}
-                      placeholder={"Price Type"}
-                    />
-                  </div>
-                  <div className="sale-section">
-                    <div className="target-selctor">
-                      <input type="checkbox" name="Sale" id="" />
-                      <p>Buyer information</p>
-                    </div>
-                    <CurrencyInput
-                      currency={currentcy[0]?.unit || ""}
-                      options={currencyOption}
-                      value={currency}
-                      amount={priceValue}
-                      label={"Sales Price"}
-                      placeholder={currentProduct?.price.toString()}
-                      onChange={(e) => {
-                        setCurrency(e.target.value);
-                      }}
-                      onChangeText={(e) => {
-                        setPriceValue(e.target.value);
-                      }}
-                    />
-                    <TextAreaInput label={"Description"} value={""} />
-                    <SelectInput
-                      label={"Taxes"}
-                      options={categoryOption}
-                      value={categoryType}
-                      onChange={(e) => setcategoryType(e.target.value)}
-                      placeholder={currentProduct?.priceunit}
-                    />
-                  </div>
-                </div>
-                {/*<Longinput
-                      currency={""}
-                      amount={""}
-                      label={""}
-                      value={""}
-                      options={[]}
-                      onChange={function (
-                        e: React.ChangeEvent<HTMLSelectElement>
-                      ): void {
-                        throw new Error("Function not implemented.");
-                      }}
-                      onChangeText={function (
-                        e: React.ChangeEvent<HTMLInputElement>
-                      ): void {
-                        throw new Error("Function not implemented.");
-                      }}
-                    />*/}
-              </div>
-            </form>
           </div>
         </Modal>
       ) : null}

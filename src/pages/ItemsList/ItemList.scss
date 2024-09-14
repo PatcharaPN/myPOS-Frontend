@@ -149,14 +149,7 @@ td {
 .create-iten-input {
   display: grid;
 }
-.option-1 {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
-.option-2 {
-  @extend .option-1;
-}
+
 .target-selctor {
   display: flex;
   gap: 10px;
@@ -239,24 +232,14 @@ td {
   font-size: 20px;
   font-weight: 400;
 }
-.name-unit {
-  display: grid;
-  height: 300px;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.grid-menu-input {
-  display: grid;
-  gap: 5rem;
-
-  grid-template-columns: repeat(2, 1fr);
-}
 .input-name-section {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 .image-upload-section {
+  width: 300px;
+  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
