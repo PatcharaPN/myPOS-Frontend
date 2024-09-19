@@ -5,6 +5,31 @@
   justify-content: center;
 }
 
+.additem-input-form {
+  display: grid;
+  gap: 5rem;
+  width: 100%;
+  justify-content: space-between;
+  grid-template-columns: 1fr 1fr;
+}
+.image-drag-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.additem-content {
+  width: fit-content;
+}
+.section-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.section-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .item-list-container {
   display: flex;
   flex-direction: column;

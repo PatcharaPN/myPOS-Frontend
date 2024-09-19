@@ -143,13 +143,7 @@ const Store = () => {
             </div>
             <div className="additem-form">
               <form className="form-grid">
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
-                  }}
-                >
+                <div>
                   <CustomInput
                     label={t("name")}
                     value={storename}
@@ -165,10 +159,10 @@ const Store = () => {
             </div>
           </div>
           <div className="btn-section">
-            <button className="btn" onClick={handleSubmit}>
+            <button className="btn-small" onClick={handleSubmit}>
               {t("save")}
             </button>
-            <button className="btn white" onClick={handleCloseModal}>
+            <button className="btn-small white" onClick={handleCloseModal}>
               {t("discard")}
             </button>
           </div>

@@ -5,7 +5,9 @@
   border: solid 1px #94a1b2;
 }
 .input {
+  width: fit-content;
   display: flex;
+  margin-top: 1rem;
   flex-direction: column;
   gap: 1rem;
   p {
@@ -23,6 +25,7 @@
   }
 }
 .additem-topmenu {
+  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -51,9 +54,28 @@
   font-weight: bold;
   border: solid 1px #94a1b2;
 }
+.btn-small {
+  width: 6rem;
+  background-color: #7f5af0;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  border: solid 1px #94a1b2;
+}
+.btn-small.white {
+  background-color: #ffffff;
+  color: black;
+  padding: 15px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  border: solid 1px #94a1b2;
+}
+
 .btn-section {
   display: flex;
   gap: 10px;
+  width: fit-content;
 }
 .additem-input-text {
   width: 100%;

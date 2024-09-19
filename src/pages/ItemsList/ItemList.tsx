@@ -235,7 +235,7 @@ const ItemList = () => {
     setSelectedItem(newSelectedItems);
   };
   return (
-    <div>
+    <div className="content-form-wrapper">
       <ContainerData
         value={searchTerm}
         onChange={(e) => setSerchTerm(e.target.value)}
@@ -396,102 +396,112 @@ const ItemList = () => {
                   <div className="option-1">
                     <div className="name-unit">
                       <div className="input-name-section">
-                        <div className="image-upload-section">
-                          <div className="image-input-border">
-                            <div className="upload-text">
-                              <p>Drag image here</p> <br /> <p>or</p> <br />{" "}
-                              <p style={{ color: "#7F5AF0" }}>Browse Image</p>
+                        <div className="image-drag-wrapper">
+                          <div className="image-upload-section">
+                            <div className="image-input-border">
+                              <div className="upload-text">
+                                <p>Drag image here</p> <br /> <p>or</p> <br />{" "}
+                                <p style={{ color: "#7F5AF0" }}>Browse Image</p>
+                              </div>
+                              <input type="file" onChange={handleFileChange} />
                             </div>
-                            <input type="file" onChange={handleFileChange} />
+                            <p style={{ fontWeight: "500" }}>
+                              File (Max: 15MB)
+                            </p>
                           </div>
-                          <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>
+                        </div>{" "}
+                        <div className="additem-input-form">
+                          <div className="section-left">
+                            <CustomInput
+                              required={true}
+                              label={"Name*"}
+                              value={itemName}
+                              placeholder="Name"
+                              onChange={(e) => setItemName(e.target.value)}
+                            />{" "}
+                            <SelectInput
+                              label={"Unit"}
+                              options={unitOption}
+                              value={unit}
+                              onChange={(e) => setUnit(e.target.value)}
+                              placeholder={"Select unit"}
+                            />{" "}
+                            <CustomInput
+                              required={false}
+                              label={"SKU"}
+                              value={sku}
+                              placeholder="Enter SKU"
+                              onChange={(e) => setSku(e.target.value)}
+                            />{" "}
+                            <SelectInput
+                              label={"Store"}
+                              options={storeOptions}
+                              value={selectedStore}
+                              onChange={(e) => setSelectedStore(e.target.value)}
+                              placeholder={"Select Store"}
+                            />
+                            <Longinput
+                              currency={""}
+                              amount={weight}
+                              label={"Weight"}
+                              value={weightUnit}
+                              options={allweightUnit}
+                              onChange={(e) => setweightUnit(e.target.value)} // For the unit selector
+                              onChangeText={(e) => setweight(e.target.value)} // For the actual weight input
+                            />
+                            <CustomInput
+                              required={false}
+                              label={"Manufacturer"}
+                              value={manufacturer}
+                              placeholder="Enter manufacturer name"
+                              onChange={(e) => setmanufacturer(e.target.value)}
+                            />
+                          </div>
+                          <div className="section-right">
+                            <SelectInput
+                              label={"Taxes"}
+                              options={categoryOption}
+                              value={categoryType}
+                              onChange={(e) => setcategoryType(e.target.value)}
+                              placeholder={"Price Type"}
+                            />
+                            <SelectInput
+                              label={"Brand"}
+                              options={brandOptions}
+                              value={selectedBrand}
+                              onChange={(e) => setSelectedBrand(e.target.value)}
+                              placeholder={"Select Brand"}
+                            />
+                            <SelectInput
+                              label={"Category"}
+                              options={categoryOption}
+                              value={categoryType}
+                              onChange={(e) => setcategoryType(e.target.value)}
+                              placeholder={"Price Type"}
+                            />
+                            <CurrencyInput
+                              currency={currentcy[0]?.unit || ""}
+                              options={currencyOption}
+                              value={currency}
+                              amount={priceValue}
+                              label={"Sales Price"}
+                              onChange={(e) => {
+                                setCurrency(e.target.value);
+                              }}
+                              onChangeText={(e) => {
+                                setPriceValue(e.target.value);
+                              }}
+                            />
+                            <SelectInput
+                              label={"Taxes"}
+                              options={categoryOption}
+                              value={categoryType}
+                              onChange={(e) => setcategoryType(e.target.value)}
+                              placeholder={"Price Type"}
+                            />
+                            <TextAreaInput label={"Description"} value={""} />
+                          </div>
                         </div>
-                        <CustomInput
-                          required={true}
-                          label={"Name*"}
-                          value={itemName}
-                          placeholder="Name"
-                          onChange={(e) => setItemName(e.target.value)}
-                        />{" "}
-                        <SelectInput
-                          label={"Unit"}
-                          options={unitOption}
-                          value={unit}
-                          onChange={(e) => setUnit(e.target.value)}
-                          placeholder={"Select unit"}
-                        />{" "}
-                        <CustomInput
-                          required={false}
-                          label={"SKU"}
-                          value={sku}
-                          placeholder="Enter SKU"
-                          onChange={(e) => setSku(e.target.value)}
-                        />{" "}
-                        <SelectInput
-                          label={"Store"}
-                          options={storeOptions}
-                          value={selectedStore}
-                          onChange={(e) => setSelectedStore(e.target.value)}
-                          placeholder={"Select Store"}
-                        />
-                        <Longinput
-                          currency={""}
-                          amount={weight}
-                          label={"Weight"}
-                          value={weightUnit}
-                          options={allweightUnit}
-                          onChange={(e) => setweightUnit(e.target.value)} // For the unit selector
-                          onChangeText={(e) => setweight(e.target.value)} // For the actual weight input
-                        />
-                        <CustomInput
-                          required={false}
-                          label={"Manufacturer"}
-                          value={manufacturer}
-                          placeholder="Enter manufacturer name"
-                          onChange={(e) => setmanufacturer(e.target.value)}
-                        />
-                        <SelectInput
-                          label={"Taxes"}
-                          options={categoryOption}
-                          value={categoryType}
-                          onChange={(e) => setcategoryType(e.target.value)}
-                          placeholder={"Price Type"}
-                        />
-                        <SelectInput
-                          label={"Brand"}
-                          options={brandOptions}
-                          value={selectedBrand}
-                          onChange={(e) => setSelectedBrand(e.target.value)}
-                          placeholder={"Select Brand"}
-                        />
-                        <SelectInput
-                          label={"Category"}
-                          options={categoryOption}
-                          value={categoryType}
-                          onChange={(e) => setcategoryType(e.target.value)}
-                          placeholder={"Price Type"}
-                        />
-                        <CurrencyInput
-                          currency={currentcy[0]?.unit || ""}
-                          options={currencyOption}
-                          value={currency}
-                          amount={priceValue}
-                          label={"Sales Price"}
-                          onChange={(e) => {
-                            setCurrency(e.target.value);
-                          }}
-                          onChangeText={(e) => {
-                            setPriceValue(e.target.value);
-                          }}
-                        />
-                        <SelectInput
-                          label={"Taxes"}
-                          options={categoryOption}
-                          value={categoryType}
-                          onChange={(e) => setcategoryType(e.target.value)}
-                          placeholder={"Price Type"}
-                        />
-                        <TextAreaInput label={"Description"} value={""} />
                         <div className="btn-section">
                           <button className="btn" onClick={handleSubmit}>
                             Save

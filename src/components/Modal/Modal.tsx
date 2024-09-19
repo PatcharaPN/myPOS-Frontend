@@ -7,7 +7,7 @@ type ModalProps = {
   onClose: () => void;
 };
 
-const Modal: React.FC<ModalProps> = ({ children, header }) => {
+const Modal: React.FC<ModalProps> = ({ children, header, onClose }) => {
   return (
     <div className="modal-backdrop">
       <div className="modal-content">

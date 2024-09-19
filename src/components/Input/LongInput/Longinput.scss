@@ -1,3 +1,8 @@
+.label-input {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .longinput-text {
   width: 100%;
   max-width: 210px;
