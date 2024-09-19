@@ -2,12 +2,12 @@ import React, { ReactNode } from "react";
 import "./Modal.scss";
 
 type ModalProps = {
-  header: string;
+  header?: string;
   children: ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
-const Modal: React.FC<ModalProps> = ({ children, header, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ children, header }) => {
   return (
     <div className="modal-backdrop">
       <div className="modal-content">

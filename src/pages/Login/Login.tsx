@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Login.scss";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import InputButton from "../../components/InputButton/InputButton";
-import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
+import { useAppDispatch } from "../../store/store";
 import { loginUser } from "../../features/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -15,9 +15,9 @@ const Login = () => {
   const [slideOut, setSlideOut] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const loginfail = useAppSelector(
-    (state: RootState) => state.auth.loginFailed,
-  );
+  // const loginfail = useAppSelector(
+  //   (state: RootState) => state.auth.loginFailed,
+  // );
 
   useEffect(() => {
     return () => setSlideOut(true);
@@ -31,15 +31,15 @@ const Login = () => {
       .unwrap()
       .then(() => {
         navigate("/");
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: t("loginfail"),
+          text: t("loginfailreason"),
+          footer: `<a href="#">${t("checkpassword")}</a>`,
+        });
       });
-    if (loginfail) {
-      Swal.fire({
-        icon: "error",
-        title: t("loginfail"),
-        text: t("loginfailreason"),
-        footer: `<a href="#">${t("checkpassword")}</a>`,
-      });
-    }
   };
 
   return (
@@ -48,7 +48,7 @@ const Login = () => {
         <div className="form">
           <div className="auth-section">
             <p className="header-text">Login</p>
-            <form action="" className="login form" onSubmit={handleSubmit}>
+            <form className="login form" onSubmit={handleSubmit}>
               <InputButton
                 onChange={(e) => setemail(e.target.value)}
                 name="email"
