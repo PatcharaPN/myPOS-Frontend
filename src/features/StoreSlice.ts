@@ -5,6 +5,7 @@ import axios from "axios";
 
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
 export interface Store {
+  storeImage: string;
   _id: string;
   storename: string;
   location: string;
@@ -26,12 +27,30 @@ const initialState: StoreState = {
 
 export const createStore = createAsyncThunk<
   Store,
-  { storename: string; location: string; owner: string }
+  {
+    storename: string;
+    location: string;
+    owner: string;
+    storeImage: File | null;
+  }
 >("store/create", async (storeData, thunkAPI) => {
   try {
+    const formData = new FormData();
+    formData.append("storename", storeData.storename);
+    formData.append("location", storeData.location);
+    formData.append("owner", storeData.owner);
+    if (storeData.storeImage) {
+      formData.append("storeImage", storeData.storeImage);
+    }
+
     const response = await axios.post<Store>(
       `${serviceURL}/api/Store`,
-      storeData,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
     );
     return response.data;
   } catch (error: any) {

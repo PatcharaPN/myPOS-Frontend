@@ -1,53 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import "./Store.scss";
 import ContainerData from "../../components/ContainerData/ContainerData";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
-import { createStore, getAllStore } from "../../features/StoreSlice";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import CustomInput from "../../components/Input/Input";
-import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
+import { getAllStore } from "../../features/StoreSlice";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import AddStoreModal from "../../components/Modal/AddStoreModal/AddStoreModal";
+import TableHeaderIcon from "../../components/TableHeaderIcon/TableHeaderIcon";
+import ActionButton from "../../components/ActionButton/ActionButton";
 
 const Store = () => {
   const { t } = useTranslation(); // Get translation function
-
   const store = useAppSelector((state: RootState) => state.store.store);
-  const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
-  );
-
   const dispatch = useAppDispatch();
-  const [storename, setStoreName] = useState("");
-  const [location, setLocation] = useState("");
+  const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
   const [searchTerm, setSearchTerm] = useState("");
   const [openModal, setOpenModal] = useState(false);
-
-  const handleOpenModal = () => {
-    setOpenModal(!openModal);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(!openModal);
-  };
-
+  const toggleModal = useCallback(() => {
+    setOpenModal((prev) => !prev);
+  }, []);
   useEffect(() => {
     dispatch(getAllStore());
   }, [dispatch]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const storeData = {
-      storename,
-      location,
-      owner: currentUser._id,
-    };
-    dispatch(createStore(storeData));
-  };
-  const filteredStore = store.filter((str) =>
-    str.storename.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredStore = store.filter((str) => {
+    if (!str || !str.storename) {
+      return false; // Skip undefined or missing storename
+    }
+    return str.storename.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div>
@@ -56,7 +38,7 @@ const Store = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         pagename={t("store")}
         Canadd={true}
-        onClickAdd={handleOpenModal}
+        onClickAdd={toggleModal}
       >
         <div className="item-list-wrapper">
           {filteredStore.length === 0 ? (
@@ -75,21 +57,14 @@ const Store = () => {
                   <th>
                     <input type="checkbox" name="" id="" />
                   </th>
-                  <th className="align-header">
-                    {t("storeName")} <Icon icon="octicon:triangle-down-16" />
-                  </th>
-                  <th className="align-header">
-                    {t("location")} <Icon icon="octicon:triangle-down-16" />
-                  </th>
-                  <th className="align-header">
-                    {t("addedBy")} <Icon icon="octicon:triangle-down-16" />
-                  </th>
-
+                  <TableHeaderIcon label="storeName" />
+                  <TableHeaderIcon label="location" />
+                  <TableHeaderIcon label="addedBy" />
                   <th className="button-section">{t("action")}</th>
                 </tr>
               </thead>
               <tbody className="content-wrapper">
-                {store.map((items, index) => (
+                {filteredStore.map((items) => (
                   <motion.tr
                     whileHover={{
                       scale: 1.005,
@@ -98,33 +73,40 @@ const Store = () => {
                         ease: "easeInOut",
                       },
                     }}
-                    key={`${items._id}-${index}`}
+                    key={items._id}
                   >
                     <td>
                       <input type="checkbox" />
                     </td>
 
-                    <td>{items.storename || ""}</td>
-                    <td>{items.location}</td>
+                    <td className="table-data">
+                      <img
+                        className="store-list-img"
+                        width={20}
+                        src={`${serviceURL}/${items.storeImage}`}
+                      />{" "}
+                      {items?.storename || ""}
+                    </td>
+                    <td>{items?.location}</td>
                     <td>{items.owner?.username}</td>
                     <td>
                       <div className="button-section-wrapper">
                         <div className="button-section">
-                          <button className="button-action view">
-                            <Icon width={20} icon="hugeicons:view" />
-                          </button>
-                          <button className="button-action edit">
-                            <Icon width={20} icon="uil:edit" />
-                          </button>
-                          <button
-                            className="button-action delete"
+                          <ActionButton
+                            icon="hugeicons:view"
+                            className={"view"}
                             onClick={() => {}}
-                          >
-                            <Icon
-                              width={20}
-                              icon="material-symbols:delete-outline"
-                            />
-                          </button>
+                          />
+                          <ActionButton
+                            icon="uil:edit"
+                            className={"edit"}
+                            onClick={() => {}}
+                          />
+                          <ActionButton
+                            icon="material-symbols:delete-outline"
+                            className={"delete"}
+                            onClick={() => {}}
+                          />
                         </div>
                       </div>
                     </td>
@@ -135,39 +117,7 @@ const Store = () => {
           )}
         </div>
       </ContainerData>
-      {openModal ? (
-        <SmallModal header={""} onClose={handleCloseModal}>
-          <div className="additem-content">
-            <div className="additem-topmenu">
-              <h2 style={{ fontWeight: "bold" }}>{t("newStore")}</h2>
-            </div>
-            <div className="additem-form">
-              <form className="form-grid">
-                <div>
-                  <CustomInput
-                    label={t("name")}
-                    value={storename}
-                    onChange={(e) => setStoreName(e.target.value)}
-                  />
-                  <CustomInput
-                    label={t("address")}
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
-          <div className="btn-section">
-            <button className="btn-small" onClick={handleSubmit}>
-              {t("save")}
-            </button>
-            <button className="btn-small white" onClick={handleCloseModal}>
-              {t("discard")}
-            </button>
-          </div>
-        </SmallModal>
-      ) : null}
+      {openModal && <AddStoreModal onClose={toggleModal} />}
     </div>
   );
 };

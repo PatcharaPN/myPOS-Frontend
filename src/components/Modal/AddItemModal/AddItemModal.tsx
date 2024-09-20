@@ -151,7 +151,7 @@ const AddItemModal = ({ onCloseModal }: AddItemModalProp) => {
 
   // onClose={handleCloseModal}
   return (
-    <Modal header={""}>
+    <Modal>
       <div className="additem-content">
         <div className="additem-topmenu">
           <h2 style={{ fontWeight: "bold" }}>{t("newItem")}</h2>

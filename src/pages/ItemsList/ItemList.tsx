@@ -11,6 +11,8 @@ import ContainerData from "../../components/ContainerData/ContainerData";
 import { useTranslation } from "react-i18next";
 import AddItemModal from "../../components/Modal/AddItemModal/AddItemModal";
 import Pagination from "../../components/Pagination/Pagination";
+import ActionButton from "../../components/ActionButton/ActionButton";
+import TableHeaderIcon from "../../components/TableHeaderIcon/TableHeaderIcon";
 
 const ItemList = () => {
   //const unitType = useAppSelector((state: RootState) => state.unit.unit);
@@ -43,12 +45,6 @@ const ItemList = () => {
     }
   };
 
-  // const handleWeight = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   console.log(e.target.value);
-  //   setweight(e.target.value);
-  // };
-
   const handleOpenModal = () => {
     setOpenModel(!openModel);
   };
@@ -58,28 +54,7 @@ const ItemList = () => {
       setCurrentpage(page);
     }
   };
-  // const handleOpenEditModal = (id: string) => {
-  //   fetchCurrentProduct(id);
-  //   console.log(id);
-  //   setEditModal(true);
-  // };
 
-  // const handleCloseEditModal = () => {
-  //   setEditModal(false);
-  //   setcurrentProduct(null);
-  // };
-
-  // const fetchCurrentProduct = useCallback(async (id: string) => {
-  //   try {
-  //     const response = await axios.get(`${serviceURL}/api/products/${id}`);
-  //     console.log(response.data);
-  //     setcurrentProduct(response.data);
-  //   } catch (err) {
-  //     throw new Error("Failed to get Prodeuct");
-  //   } finally {
-  //     console.log("Fetch complete");
-  //   }
-  // }, []);
   const filteredProducts = currentProducts.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
@@ -139,28 +114,14 @@ const ItemList = () => {
                         checked={selectedItem.size === currentProducts.length}
                       />
                     </th>
-                    <th className="align-header">
-                      {t("productName")}{" "}
-                      <Icon icon="octicon:triangle-down-16" />
-                    </th>
-                    <th className="align-header">
-                      {t("productID")} <Icon icon="octicon:triangle-down-16" />
-                    </th>
-                    <th className="align-header">
-                      {t("category")} <Icon icon="octicon:triangle-down-16" />
-                    </th>
-                    <th className="align-header">
-                      {t("addedBy")} <Icon icon="octicon:triangle-down-16" />
-                    </th>
-                    <th className="align-header">
-                      {t("available")} <Icon icon="octicon:triangle-down-16" />
-                    </th>
-                    <th className="align-header">
-                      {t("reserved")} <Icon icon="octicon:triangle-down-16" />
-                    </th>
-                    <th className="align-header">
-                      {t("stock")} <Icon icon="octicon:triangle-down-16" />
-                    </th>
+
+                    <TableHeaderIcon label="productName" />
+                    <TableHeaderIcon label="productID" />
+                    <TableHeaderIcon label="category" />
+                    <TableHeaderIcon label="addedBy" />
+                    <TableHeaderIcon label="available" />
+                    <TableHeaderIcon label="reserved" />
+                    <TableHeaderIcon label="stock" />
                     <th className="button-section">{t("action")}</th>
                   </tr>
                 </thead>
@@ -203,24 +164,21 @@ const ItemList = () => {
                       <td>
                         <div className="button-section-wrapper">
                           <div className="button-section">
-                            <button className="button-action view">
-                              <Icon width={20} icon="hugeicons:view" />
-                            </button>
-                            <button
-                              className="button-action edit"
+                            <ActionButton
+                              icon="hugeicons:view"
+                              className={"view"}
                               onClick={() => {}}
-                            >
-                              <Icon width={20} icon="uil:edit" />
-                            </button>
-                            <button
-                              className="button-action delete"
+                            />
+                            <ActionButton
+                              icon="uil:edit"
+                              className={"edit"}
+                              onClick={() => {}}
+                            />
+                            <ActionButton
+                              icon="material-symbols:delete-outline"
+                              className={"delete"}
                               onClick={() => handleDeleteProduct(product._id)}
-                            >
-                              <Icon
-                                width={20}
-                                icon="material-symbols:delete-outline"
-                              />
-                            </button>
+                            />{" "}
                           </div>
                         </div>
                       </td>
@@ -237,9 +195,9 @@ const ItemList = () => {
           />
         </div>
       </ContainerData>{" "}
-      {openModel ? (
+      {openModel && (
         <AddItemModal onCloseModal={() => setOpenModel(!openModel)} />
-      ) : null}
+      )}
     </div>
   );
 };
