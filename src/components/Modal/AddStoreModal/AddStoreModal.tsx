@@ -9,6 +9,7 @@ import {
   useAppSelector,
 } from "../../../store/store";
 import { createStore, getAllStore } from "../../../features/StoreSlice";
+import ImageCircleSelector from "../../ImageCircleSelector/ImageCircleSelector";
 
 const AddStoreModal = ({ onClose }: { onClose: () => void }) => {
   const { t } = useTranslation(); // Get translation function
@@ -76,9 +77,7 @@ const AddStoreModal = ({ onClose }: { onClose: () => void }) => {
         </div>
         <div className="additem-form">
           <form className="form-grid" onSubmit={handleSubmit}>
-            <div className="store-img">
-              <input type="file" onChange={handleFileChange} />
-            </div>
+            <ImageCircleSelector onChange={handleFileChange} />{" "}
             <div className="form-layout">
               <CustomInput
                 label={t("name")}

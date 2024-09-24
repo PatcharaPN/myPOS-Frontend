@@ -2,28 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { login } from "../services/authService";
 import { getLoginHistory } from "../services/ApiService";
-import { User } from "../types/interface";
+import { ErrorResponse, UpdateUserArgs, User } from "../types/interface";
 import axios, { AxiosError } from "axios";
+import { handleAxiosError } from "../utils/errorHandler";
 
 const storedUser = localStorage.getItem("currentUser");
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-
-interface ErrorResponse {
-  message: string;
-}
-
-interface UpdateUserArgs {
-  userId: string;
-  role: string;
-}
-export interface History {
-  userId: string;
-  user: User;
-  ipAddress: string;
-  loginFailed: boolean;
-  loginTime: Date;
-  userAgent: string;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -43,10 +27,10 @@ export const getAllUsers = createAsyncThunk(
       const response = await axios.get(`${serviceURL}/api/users`);
       return response.data;
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      return rejectWithValue(
-        axiosError.response?.data.message || "failed to fetched all user",
-      );
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
   },
 );
@@ -61,8 +45,10 @@ export const upDatedUser = createAsyncThunk<User, UpdateUserArgs>(
       });
       return res.data;
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      return rejectWithValue(axiosError.response?.data.message);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
   },
 );
@@ -74,16 +60,17 @@ export const getHistory = createAsyncThunk(
       const response = await getLoginHistory();
       return response;
     } catch (error) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      return rejectWithValue(axiosError.response?.data.message);
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
   },
 );
 
 export const loginUser = createAsyncThunk<
   User,
-  { email: string; password: string },
-  { rejectValue: string }
+  { email: string; password: string }
 >("auth/loginUser", async ({ email, password }, { rejectWithValue }) => {
   try {
     const user = await login(email, password);
@@ -95,10 +82,10 @@ export const loginUser = createAsyncThunk<
     });
     return user;
   } catch (error) {
-    const axiosError = error as AxiosError<ErrorResponse>;
-    return rejectWithValue(
-      axiosError.response?.data?.message || "Login failed",
-    );
+    if (error instanceof AxiosError) {
+      return rejectWithValue(handleAxiosError(error));
+    }
+    return rejectWithValue("An unexpected error occured");
   }
 });
 

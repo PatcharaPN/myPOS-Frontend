@@ -7,6 +7,7 @@ import { loginUser } from "../../features/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Swal from "sweetalert2";
+import LoginForm from "../../components/LoginForm/LoginForm";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -48,31 +49,7 @@ const Login = () => {
         <div className="form">
           <div className="auth-section">
             <p className="header-text">Login</p>
-            <form className="login form" onSubmit={handleSubmit}>
-              <InputButton
-                onChange={(e) => setemail(e.target.value)}
-                name="email"
-                value={email}
-                label={"Email Address"}
-                placholder={"You@example.com"}
-              />
-              <InputButton
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
-                type="password"
-                value={password}
-                label={"Password"}
-                placholder={"Enter 6 character or more"}
-              />
-              <div className="rememberme">
-                <input type="checkbox" />
-                <p>Remember me</p>
-              </div>
-
-              <button type="submit" className="btn login">
-                {t("login")}
-              </button>
-            </form>
+            <LoginForm onSubmit={handleSubmit} />
             <div className="social-login">
               <div className="social-btn">
                 <Icon width={50} icon="devicon:google" />

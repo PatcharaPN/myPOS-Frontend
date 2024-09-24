@@ -1,16 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Product } from "../types/interface";
+import { CartState, Product } from "../types/interface";
 
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-export interface CartState {
-  items: CartItem[];
-  loading: boolean;
-  outOfStock: boolean;
-  error: string | null;
-}
 const initialState: CartState = {
   items: [],
   loading: false,
@@ -24,7 +14,7 @@ const cartSlice = createSlice({
   reducers: {
     addtocart: (state, action: PayloadAction<Product>) => {
       const existingItem = state.items.find(
-        (item) => item.product._id === action.payload._id
+        (item) => item.product._id === action.payload._id,
       );
       if (existingItem) {
         if (existingItem.quantity >= action.payload.stock) {
@@ -50,14 +40,14 @@ const cartSlice = createSlice({
     },
     deleteItem: (state, action: PayloadAction<Product>) => {
       const existingItem = state.items.find(
-        (item) => item.product.name === action.payload.name
+        (item) => item.product.name === action.payload.name,
       );
       if (existingItem) {
         existingItem.quantity -= 1;
         state.outOfStock = false;
         if (existingItem.quantity <= 0) {
           state.items = state.items.filter(
-            (item) => item.product.name !== action.payload.name
+            (item) => item.product.name !== action.payload.name,
           );
         }
       }

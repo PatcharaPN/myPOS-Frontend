@@ -1,24 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Product, User } from "../types/interface";
+import { Store, StoreState } from "../types/interface";
 import axios from "axios";
 
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-export interface Store {
-  storeImage: string;
-  _id: string;
-  storename: string;
-  location: string;
-  owner: User;
-  product: Product[];
-}
-
-export interface StoreState {
-  store: Store[];
-  loading: boolean;
-  error: string | null;
-}
-
 const initialState: StoreState = {
   store: [],
   loading: false,

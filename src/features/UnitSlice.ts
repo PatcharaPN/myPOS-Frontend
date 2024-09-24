@@ -1,17 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { UnitState } from "../types/interface";
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-
-export interface Unit {
-  name: string;
-  unit: string;
-}
-
-export interface UnitState {
-  unit: Unit[];
-  loading: boolean;
-  error: string | null;
-}
 
 export const initialState: UnitState = {
   unit: [],

@@ -21,6 +21,7 @@ import {
   useAppSelector,
 } from "../../../store/store";
 import SelectInput from "../../Input/Selecter/Selecter";
+import ImageCircleSelector from "../../ImageCircleSelector/ImageCircleSelector";
 
 export const unitType: WeightUnit[] = [{ value: "Pcs", label: "Pcs" }];
 
@@ -162,18 +163,7 @@ const AddItemModal = ({ onCloseModal }: AddItemModalProp) => {
               <div className="option-1">
                 <div className="name-unit">
                   <div className="input-name-section">
-                    <div className="image-drag-wrapper">
-                      <div className="image-upload-section">
-                        <div className="image-input-border">
-                          <div className="upload-text">
-                            <p>Drag image here</p> <br /> <p>or</p> <br />{" "}
-                            <p style={{ color: "#7F5AF0" }}>Browse Image</p>
-                          </div>
-                          <input type="file" onChange={handleFileChange} />
-                        </div>
-                        <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>
-                      </div>
-                    </div>{" "}
+                    <ImageCircleSelector onChange={handleFileChange} />{" "}
                     <div className="additem-input-form">
                       <div className="section-left">
                         <CustomInput

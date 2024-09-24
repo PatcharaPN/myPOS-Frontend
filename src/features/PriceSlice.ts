@@ -2,24 +2,9 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 import { fetchPrice } from "../services/ApiService";
 import axios from "axios";
+import { Price, PriceState } from "../types/interface";
 
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-export type Price = {
-  _id: string;
-  name: string;
-  unit: string;
-  description: string;
-  addedBy: User;
-};
-export interface User {
-  name: string;
-  role: string;
-}
-export interface PriceState {
-  price: Price[];
-  loading: boolean;
-  error: string | null;
-}
 
 const initialState: PriceState = {
   price: [],

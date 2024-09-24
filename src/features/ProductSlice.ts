@@ -5,36 +5,20 @@ import {
   getAmount,
   getProduct,
 } from "../services/productService";
-import { getAllAmount, Product, User } from "../types/interface";
+import {
+  Brand,
+  getAllAmount,
+  LowStockItem,
+  Product,
+  ProductState,
+} from "../types/interface";
 import { fetchBrand } from "../services/ApiService";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { handleAxiosError } from "../utils/errorHandler";
 
 // Define API base URL based on your environment setup
 const serviceURL =
   import.meta.env.VITE_APP_SERVICE_URL || "http://localhost:3000"; // Fallback to localhost if env variable is not set
-
-export interface Brand {
-  _id: string;
-  name: string;
-  prefix: string;
-  addedBy: User;
-}
-
-export interface LowStockItem {
-  _id: string;
-  lowStock: number;
-  total: number;
-  products: Product;
-}
-
-export interface ProductState {
-  products: Product[];
-  brand: Brand[];
-  lowStock: LowStockItem[];
-  totalAmount: getAllAmount[];
-  loading: boolean;
-  error: string | null;
-}
 
 const initialState: ProductState = {
   products: [],
@@ -45,27 +29,34 @@ const initialState: ProductState = {
   error: null,
 };
 
-export const getBrand = createAsyncThunk<Brand[]>("brand/getAll", async () => {
-  try {
-    const res = await fetchBrand();
-    return res;
-  } catch (error) {
-    console.error("Error fetching brands:", error);
-    throw error;
-  }
-});
+export const getBrand = createAsyncThunk<Brand[]>(
+  "brand/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetchBrand();
+      return res;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
+    }
+  },
+);
 
 export const getAmountSummary = createAsyncThunk<getAllAmount[]>(
   "products/getAmount",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const data = await getAmount();
       return data;
     } catch (error) {
-      console.error("Error fetching amount summary:", error);
-      throw error;
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 
 export const addItem = createAsyncThunk<Product, FormData>(
@@ -74,50 +65,55 @@ export const addItem = createAsyncThunk<Product, FormData>(
     try {
       const response = await addProduct(formData);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 
 export const lowStock = createAsyncThunk<LowStockItem[]>(
   "product/lowStock",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${serviceURL}/api/lowstock`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching low stock data:", error);
-      throw error;
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 
 export const createBrand = createAsyncThunk(
   "product/createBrand",
   async (
     brandData: { name: string; prefix: string; addedBy: string },
-    thunkAPI
+    { rejectWithValue },
   ) => {
     try {
       const response = await axios.post(`${serviceURL}/api/brand`, brandData, {
         timeout: 10000,
       });
       return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data || error.message || "Failed to create brand"
-      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 
 export const getAllProducts = createAsyncThunk<Product[]>(
   "products/getAll",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const data = await getProduct();
-      // Group products by a unique key (name-price) and aggregate their stock
       const groupedProducts = data.reduce(
         (acc: Record<string, Product & { _id: string }>, product: Product) => {
           const key = `${product.name}-${product.price}`;
@@ -129,14 +125,16 @@ export const getAllProducts = createAsyncThunk<Product[]>(
           acc[key].reserved += product.reserved;
           return acc;
         },
-        {} as Record<string, Product & { _id: string }>
+        {} as Record<string, Product & { _id: string }>,
       );
       return Object.values(groupedProducts);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      throw error;
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 
 export const deleteOne = createAsyncThunk<Product, string>(
@@ -146,9 +144,12 @@ export const deleteOne = createAsyncThunk<Product, string>(
       const res = await deleteProduct(productId);
       return res;
     } catch (error) {
-      return rejectWithValue("Failed to delete the product");
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 
 const productSlice = createSlice({
@@ -179,7 +180,7 @@ const productSlice = createSlice({
       .addCase(deleteOne.fulfilled, (state, action) => {
         state.loading = false;
         state.products = state.products.filter(
-          (product) => product._id !== action.payload._id
+          (product) => product._id !== action.payload._id,
         );
       })
       .addCase(deleteOne.rejected, (state, action) => {

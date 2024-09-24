@@ -1,21 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { Customer, CustomerState } from "../types/interface";
+import { handleAxiosError } from "../utils/errorHandler";
 
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-export interface Customer {
-  _id: string;
-  customername: string;
-  email: string;
-  phone: string;
-  amount: number;
-}
-
-export interface CustomerState {
-  customer: Customer[];
-  error: string | null;
-  totalcustomer: number;
-  loading: boolean;
-}
 const initialState: CustomerState = {
   customer: [],
   totalcustomer: 0,
@@ -29,27 +17,32 @@ export const createCustomer = createAsyncThunk<
   try {
     const response = await axios.post<Customer>(
       `${serviceURL}/api/Customer`,
-      customerData
+      customerData,
     );
     return response.data;
-  } catch (error: any) {
-    console.error(error);
-    return rejectWithValue(error.response.data || "An error occurred");
-  }
-});
-export const getAllCustomer = createAsyncThunk<
-  Customer[],
-  void,
-  { rejectValue: string }
->("customer/getAll", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.get<Customer[]>(`${serviceURL}/api/Customer`);
-    return response.data;
   } catch (error) {
-    console.error("Error with getAllCustomer in CustomerSlice", error);
-    return rejectWithValue("Failed to fetch Customer");
+    if (error instanceof AxiosError) {
+      return rejectWithValue(handleAxiosError(error));
+    }
+    return rejectWithValue("An unexpected error occured");
   }
 });
+export const getAllCustomer = createAsyncThunk<Customer[], void>(
+  "customer/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<Customer[]>(
+        `${serviceURL}/api/Customer`,
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
+    }
+  },
+);
 
 // /Customer/amount
 export const getAmountCustomer = createAsyncThunk<number>(
@@ -57,13 +50,16 @@ export const getAmountCustomer = createAsyncThunk<number>(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get<{ amount: number }>(
-        `${serviceURL}/api/Customer/amount`
+        `${serviceURL}/api/Customer/amount`,
       );
       return response.data.amount;
     } catch (error) {
-      return rejectWithValue("Fail to get Amount of Customer");
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An unexpected error occured");
     }
-  }
+  },
 );
 const customerSlice = createSlice({
   name: "customer",
@@ -78,7 +74,7 @@ const customerSlice = createSlice({
         getAllCustomer.fulfilled,
         (state, action: PayloadAction<Customer[]>) => {
           state.customer = action.payload || [];
-        }
+        },
       )
       .addCase(getAllCustomer.rejected, (state, action) => {
         state.error = action.error as string;
@@ -88,7 +84,7 @@ const customerSlice = createSlice({
         (state, action: PayloadAction<Customer>) => {
           state.customer.push(action.payload);
           state.loading = false;
-        }
+        },
       )
       .addCase(createCustomer.pending, (state) => {
         state.loading = true;
