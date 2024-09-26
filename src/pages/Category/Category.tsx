@@ -7,20 +7,26 @@ import ContainerData from "../../components/ContainerData/ContainerData";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import CustomInput from "../../components/Input/Input";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
+import AddCategoryModal from "../../components/Modal/AddCategoryModal/AddCategoryModal";
+import { handleSingleCheck } from "../../utils/handleSingleCheck";
+import CheckBox from "../../components/CheckBox/CheckBox";
+import { handleCheckAll } from "../../utils/handleCheckbox";
 
 const Category = () => {
   const { t } = useTranslation(); // Destructure t from useTranslation
   const category = useAppSelector(
-    (state: RootState) => state.category.category,
+    (state: RootState) => state.category.category
   );
   const dispatch = useAppDispatch();
-  const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
-  );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemPerPage = 7;
+  const [selectedItem, setSelectedItem] = useState<Set<string>>(new Set());
+  const IndexOfLastItem = currentPage * itemPerPage;
+  const IndexOfFirstItem = IndexOfLastItem - itemPerPage;
+  const currentItem = category.slice(IndexOfFirstItem, IndexOfLastItem);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+
   useEffect(() => {
     dispatch(getCategory());
   }, [dispatch]);
@@ -33,19 +39,15 @@ const Category = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const categoryData = {
-      name,
-      description,
-      createdBy: currentUser._id,
-    };
-    dispatch(createCategory(categoryData));
-    setIsModalOpen(false);
-  };
   const filterdCategory = category.filter((cat) =>
-    cat.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    cat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const handleCheck = (id: string) => {
+    handleSingleCheck(id, setSelectedItem);
+  };
+  const handleCheckMany = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleCheckAll(e, currentItem, setSelectedItem);
+  };
   return (
     <ContainerData
       onChange={(e) => setSearchTerm(e.target.value)}
@@ -53,40 +55,15 @@ const Category = () => {
       Canadd={true}
       onClickAdd={handleOpenModal}
     >
-      {isModalOpen ? (
-        <SmallModal header={""} onClose={handleCloseModal}>
-          <h2 style={{ fontWeight: "bold", marginBottom: "40px" }}>
-            {t("newCategory")}
-          </h2>
-          <CustomInput
-            label={t("name")}
-            placeholder={t("insertName")}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <CustomInput
-            label={t("description")}
-            placeholder={t("insertDescription")}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <div className="additem-content">
-            <div className="btn-section">
-              <button className="btn" onClick={handleSubmit}>
-                {t("save")}
-              </button>
-              <button className="btn white" onClick={handleCloseModal}>
-                {t("discard")}
-              </button>
-            </div>
-          </div>
-        </SmallModal>
-      ) : null}
+      {isModalOpen ? <AddCategoryModal onClose={handleCloseModal} /> : null}
       <table>
         <thead>
           <tr>
             <th>
-              <input type="checkbox" name="" id="" />
+              <CheckBox
+                onChange={handleCheckMany}
+                checked={selectedItem.size === currentItem.length}
+              />
             </th>
             <th className="align-header">
               {t("categoryName")} <Icon icon="octicon:triangle-down-16" />
@@ -107,7 +84,10 @@ const Category = () => {
           {filterdCategory.map((cat) => (
             <tr key={cat._id}>
               <td>
-                <input type="checkbox" />
+                <CheckBox
+                  onChange={() => handleCheck(cat._id)}
+                  checked={selectedItem.has(cat._id)}
+                />
               </td>
               <td className="table-data">{cat.name ?? ""}</td>
               <td>{cat?.productCount ?? "N/A"}</td>
