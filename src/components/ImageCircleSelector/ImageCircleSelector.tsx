@@ -10,7 +10,7 @@ const ImageCircleSelector = ({
           <div className="upload-text">
             <p>Drag image here</p> <br /> <p>or</p> <br />{" "}
             <p style={{ color: "#7F5AF0" }}>Browse Image</p>
-          </div>
+          </div>{" "}
           <input type="file" onChange={onChange} />
         </div>
         <p style={{ fontWeight: "500" }}>File (Max: 15MB)</p>

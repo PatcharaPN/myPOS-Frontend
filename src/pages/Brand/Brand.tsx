@@ -8,18 +8,25 @@ import CustomInput from "../../components/Input/Input";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import "./Brand.scss";
+import { handleCheckAll } from "../../utils/handleCheckbox";
+import CheckBox from "../../components/CheckBox/CheckBox";
+import { handleSingleCheck } from "../../utils/handleSingleCheck";
+import AddBrandModal from "../../components/Modal/AddBrandModal/AddBrandModal";
 
 const BrandPage = () => {
   const { t } = useTranslation(); // Get translation function
 
   const brand = useAppSelector((state: RootState) => state.product.brand);
-  const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
-  );
+
+  const itemPerPage = 7;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const indexOfLastItem = currentPage * itemPerPage;
+  const [selectedItem, setSelectedItem] = useState<Set<string>>(new Set());
+  const indexOfFirstItem = indexOfLastItem - itemPerPage;
+  const currentItem = brand.slice(indexOfFirstItem, indexOfLastItem);
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [prefix, setPrefix] = useState("");
+
   const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     dispatch(getBrand());
@@ -29,27 +36,18 @@ const BrandPage = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const filteredBrand = brand.filter((brand) =>
+    brand.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const handleCheck = (id: string) => {
+    handleSingleCheck(id, setSelectedItem);
+  };
+  const handleCheckMany = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleCheckAll(e, currentItem, setSelectedItem);
+  };
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const brandData = {
-      name,
-      prefix,
-      addedBy: currentUser._id,
-    };
-
-    console.log("Submitting brand data:", brandData);
-
-    dispatch(createBrand(brandData));
-    setIsModalOpen(false);
-  };
-  const filteredBrand = brand.filter((brand) =>
-    brand.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
   return (
     <ContainerData
       value={searchTerm}
@@ -58,36 +56,8 @@ const BrandPage = () => {
       Canadd={true}
       onClickAdd={handleOpenModal}
     >
-      {isModalOpen && (
-        <SmallModal header={t("addBrand")} onClose={handleCloseModal}>
-          <div className="modal-wrapper">
-            <form onSubmit={handleSubmit} className="from-input">
-              <CustomInput
-                label={t("name")}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <CustomInput
-                label={t("prefix")}
-                value={prefix}
-                onChange={(e) => setPrefix(e.target.value)}
-              />
-              <div className="btn-section">
-                <button className="btn" type="submit">
-                  {t("save")}
-                </button>
-                <button
-                  className="btn white"
-                  type="button"
-                  onClick={handleCloseModal}
-                >
-                  {t("discard")}
-                </button>
-              </div>
-            </form>
-          </div>
-        </SmallModal>
-      )}
+      {/*Modal*/}
+      {isModalOpen && <AddBrandModal onClose={handleCloseModal} />}
       <div className="item-list-wrapper">
         {brand.length === 0 ? (
           <div className="empty-img">
@@ -103,7 +73,10 @@ const BrandPage = () => {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" name="" id="" />
+                  <CheckBox
+                    onChange={handleCheckMany}
+                    checked={selectedItem.size === currentItem.length}
+                  />
                 </th>
                 <th className="align-header">
                   {t("brand")} <Icon icon="octicon:triangle-down-16" />
@@ -135,7 +108,10 @@ const BrandPage = () => {
                   key={brand._id}
                 >
                   <td>
-                    <input type="checkbox" />
+                    <CheckBox
+                      onChange={() => handleCheck(brand._id)}
+                      checked={selectedItem.has(brand._id)}
+                    />
                   </td>
                   <td>{brand.name}</td>
                   <td>{brand.prefix}</td>

@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const isAuthenticated = useAppSelector(
     (state: RootState) => state.auth.currentUser !== null,
   );
+
   return (
     <Router>
       <Routes>

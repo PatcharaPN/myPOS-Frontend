@@ -13,6 +13,8 @@ import AddItemModal from "../../components/Modal/AddItemModal/AddItemModal";
 import Pagination from "../../components/Pagination/Pagination";
 import ActionButton from "../../components/ActionButton/ActionButton";
 import TableHeaderIcon from "../../components/TableHeaderIcon/TableHeaderIcon";
+import CheckBox from "../../components/CheckBox/CheckBox";
+import { handleCheckAll } from "../../utils/handleCheckbox";
 
 const ItemList = () => {
   //const unitType = useAppSelector((state: RootState) => state.unit.unit);
@@ -30,7 +32,7 @@ const ItemList = () => {
   const [searchTerm, setSerchTerm] = useState("");
   const currentProducts = products.slice(
     indexOfFirstPayment,
-    indexOfLastPayment,
+    indexOfLastPayment
   );
 
   const { t } = useTranslation();
@@ -56,16 +58,10 @@ const ItemList = () => {
   };
 
   const filteredProducts = currentProducts.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const handleCheckAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    const newSelectedItems = new Set<string>();
-
-    if (checked) {
-      currentProducts.forEach((product) => newSelectedItems.add(product._id));
-    }
-    setSelectedItem(newSelectedItems);
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleCheckAll(e, currentProducts, setSelectedItem);
   };
 
   const handleCheckboxChange = (id: string, checked: boolean) => {
@@ -106,11 +102,8 @@ const ItemList = () => {
                 <thead>
                   <tr>
                     <th>
-                      <input
-                        type="checkbox"
-                        name=""
-                        id=""
-                        onChange={handleCheckAll}
+                      <CheckBox
+                        onChange={handleCheck}
                         checked={selectedItem.size === currentProducts.length}
                       />
                     </th>
@@ -139,8 +132,7 @@ const ItemList = () => {
                       key={product._id}
                     >
                       <td>
-                        <input
-                          type="checkbox"
+                        <CheckBox
                           checked={selectedItem.has(product._id)}
                           onChange={(e) =>
                             handleCheckboxChange(product._id, e.target.checked)

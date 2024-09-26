@@ -42,11 +42,11 @@ interface WeightUnit {
 const AddItemModal = ({ onCloseModal }: AddItemModalProp) => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
+    (state: RootState) => state.auth.currentUser
   );
   const store = useAppSelector((state: RootState) => state.store.store);
   const category = useAppSelector(
-    (state: RootState) => state.category.category,
+    (state: RootState) => state.category.category
   );
   const brand = useAppSelector((state: RootState) => state.product.brand);
   const [available] = useState("1");

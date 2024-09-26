@@ -1,37 +1,14 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Product, User } from "../types/interface";
+import {
+  ErrorResponse,
+  Payment,
+  PaymentState,
+  PaymentSummary,
+} from "../types/interface";
 import axios, { AxiosError } from "axios";
+import { handleAxiosError } from "../utils/errorHandler";
 
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
-export type Payment = {
-  _id: string;
-  createdBy: User;
-  products: Product;
-  status: string;
-  amount: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
-export type PaymentSummary = {
-  _id: {
-    month: number;
-    year: number;
-  };
-  totalPayments: number;
-  totalAmount: number;
-  monthName: string;
-};
-interface ErrorResponse {
-  message: string;
-}
-
-export interface PaymentState {
-  payments: Payment[]; // Changed to 'payments' to reflect multiple payments
-  loading: boolean;
-  paymentSummary: PaymentSummary[];
-  amount: number | null;
-  error: string | null;
-}
 
 const initialState: PaymentState = {
   payments: [],
@@ -41,32 +18,28 @@ const initialState: PaymentState = {
   error: null,
 };
 export const createPayment = createAsyncThunk<
-  Payment, // Success response type
-  { createdBy: string; products: string[]; status: string }, // Input payload
-  {
-    rejectValue: ErrorResponse; // Type for rejected action
-  }
->("payment/create", async (paymentData, thunkAPI) => {
-  try {
-    const response = await axios.post<Payment>(
-      `${serviceURL}/api/payment`,
-      paymentData,
-    );
-    return response.data;
-  } catch (error) {
-    // Narrow down the type of the error
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<ErrorResponse>;
-      // Check if the error response exists, otherwise fall back to a default message
-      return thunkAPI.rejectWithValue(
-        axiosError.response?.data || { message: axiosError.message },
-      );
-    } else {
-      // If the error is not an AxiosError, return a generic error
-      return thunkAPI.rejectWithValue({ message: String(error) });
+  Payment,
+  { createdBy: string; products: string[]; status: string } // Input payload
+>(
+  "payment/create",
+  async ({ createdBy, products, status }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post<Payment>(`${serviceURL}/api/payment`, {
+        createdBy,
+        products,
+        status,
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+
+      return rejectWithValue("An unexpected error occured");
     }
-  }
-});
+  },
+);
+
 export const getPaymentSummary = createAsyncThunk(
   "payment/getSummary",
   async () => {

@@ -172,3 +172,36 @@ export interface CustomerState {
   totalcustomer: number;
   loading: boolean;
 }
+export interface Payment {
+  _id: string;
+  createdBy: User;
+  products: Product;
+  status: string;
+  amount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface PaymentSummary {
+  _id: {
+    month: number;
+    year: number;
+  };
+  totalPayments: number;
+  totalAmount: number;
+  monthName: string;
+}
+export interface ErrorResponse {
+  message: string;
+}
+
+export interface PaymentState {
+  payments: Payment[]; // Changed to 'payments' to reflect multiple payments
+  loading: boolean;
+  paymentSummary: PaymentSummary[];
+  amount: number | null;
+  error: string | null;
+}
+export interface CheckBoxProp {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checked: boolean;
+}

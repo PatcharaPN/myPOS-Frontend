@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
 import { Link, useNavigate } from "react-router-dom";
 import i18n from "../../i18n";
-import { menuItems, menuItemsMobile } from "../MenuList";
+import { menuItemsMobile } from "../MenuList";
 import { useTranslation } from "react-i18next";
 
 type MenuListProps = {

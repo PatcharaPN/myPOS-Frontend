@@ -38,19 +38,23 @@ const ActivityBox: React.FC<ActivityProps> = ({
 
   return (
     <div className="box-container">
-      <div className="type-section">
-        <h1 style={{ color: typeColor }}>{total}</h1>
-        <p>{unit}</p>
-      </div>
       <div className="type-box">
         <Icon icon={icon} />
         <p>{text}</p>
         {type}
       </div>
-      <div className="see-more" onClick={onClick}>
+      <div className="type-section">
+        <div className="type-wrapper">
+          <p id="total-textsize" style={{ color: color }}>
+            {total}
+          </p>
+          {/* <p id="unit-textsize">{unit}</p> */}
+        </div>
+      </div>
+      {/* <div className="see-more" onClick={onClick}>
         <p>{t("view")}</p>
         <Icon icon="iconamoon:arrow-right-2-duotone" />
-      </div>
+      </div> */}
     </div>
   );
 };

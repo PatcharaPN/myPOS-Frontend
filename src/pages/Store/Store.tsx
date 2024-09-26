@@ -10,17 +10,26 @@ import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import AddStoreModal from "../../components/Modal/AddStoreModal/AddStoreModal";
 import TableHeaderIcon from "../../components/TableHeaderIcon/TableHeaderIcon";
 import ActionButton from "../../components/ActionButton/ActionButton";
+import CheckBox from "../../components/CheckBox/CheckBox";
+import { handleCheckAll } from "../../utils/handleCheckbox";
+import { handleSingleCheck } from "../../utils/handleSingleCheck";
 
 const Store = () => {
   const { t } = useTranslation(); // Get translation function
   const store = useAppSelector((state: RootState) => state.store.store);
   const dispatch = useAppDispatch();
+  const [currentpage, setCurrentpage] = useState<number>(1);
   const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
+  const itemPerPage = 7;
+  const [selectedItem, setSelectedItem] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
+  const indexOfLastPayment = currentpage * itemPerPage;
+  const indexOfFirstPayment = indexOfLastPayment - itemPerPage;
   const [openModal, setOpenModal] = useState(false);
   const toggleModal = useCallback(() => {
     setOpenModal((prev) => !prev);
   }, []);
+
   useEffect(() => {
     dispatch(getAllStore());
   }, [dispatch]);
@@ -30,7 +39,13 @@ const Store = () => {
     }
     return str.storename.toLowerCase().includes(searchTerm.toLowerCase());
   });
-
+  const handleCheckMany = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleCheckAll(e, currentStore, setSelectedItem);
+  };
+  const currentStore = store.slice(indexOfFirstPayment, indexOfLastPayment);
+  const handleCheck = (id: string) => {
+    handleSingleCheck(id, setSelectedItem);
+  };
   return (
     <div>
       <ContainerData
@@ -55,7 +70,10 @@ const Store = () => {
               <thead>
                 <tr>
                   <th>
-                    <input type="checkbox" name="" id="" />
+                    <CheckBox
+                      onChange={handleCheckMany}
+                      checked={selectedItem.size === currentStore.length}
+                    />
                   </th>
                   <TableHeaderIcon label="storeName" />
                   <TableHeaderIcon label="location" />
@@ -76,7 +94,10 @@ const Store = () => {
                     key={items._id}
                   >
                     <td>
-                      <input type="checkbox" />
+                      <CheckBox
+                        onChange={() => handleCheck(items._id)}
+                        checked={selectedItem.has(items._id)}
+                      />
                     </td>
 
                     <td className="table-data">
