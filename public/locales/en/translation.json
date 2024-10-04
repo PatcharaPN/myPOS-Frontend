@@ -145,5 +145,6 @@
   "owner": "Buyer",
   "date": "DD/MM/YYYY",
   "time": "Time",
-  "editUserPermission": "Edit user permission"
+  "editUserPermission": "Edit user permission",
+  "editStore": "Edit Store"
 }

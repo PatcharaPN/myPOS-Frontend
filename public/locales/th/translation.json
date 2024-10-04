@@ -145,5 +145,6 @@
   "owner": "ผู้ซื้อ",
   "date": "วว/ดด/ปปปป",
   "time": "เวลา",
-  "editUserPermission": "จัดการสิทธ์ผู้ใช้"
+  "editUserPermission": "จัดการสิทธ์ผู้ใช้",
+  "editStore": "แก้ไขข้อมูลร้านค้า"
 }

@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Store, StoreState } from "../types/interface";
-import axios from "axios";
-
+import axios, { AxiosError } from "axios";
+import { handleAxiosError } from "../utils/errorHandler";
 const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
+
 const initialState: StoreState = {
   store: [],
+  currentStore: null,
   loading: false,
   error: null,
 };
@@ -42,6 +44,37 @@ export const createStore = createAsyncThunk<
     return thunkAPI.rejectWithValue(error.response?.data || error.message);
   }
 });
+
+export const getStoreById = createAsyncThunk<Store, string>(
+  "store/getById",
+  async (storeId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<Store>(
+        `${serviceURL}/api/store/${storeId}`,
+      );
+      return response.data; // This returns a single Store object
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("An error occurred when fetching the store by ID");
+    }
+  },
+);
+export const deleteStore = createAsyncThunk<Store, string>(
+  "store/delete",
+  async (storeId, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${serviceURL}/api/store/${storeId}`);
+      return response.data; // Return the status code (e.g., 200 for success)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(handleAxiosError(error));
+      }
+      return rejectWithValue("Error when deleting Store"); // Fallback for non-Axios errors
+    }
+  },
+);
 
 export const getAllStore = createAsyncThunk<Store[]>(
   "store/getAll",
@@ -91,6 +124,32 @@ const storeSlice = createSlice({
       .addCase(createStore.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred";
+      })
+      .addCase(deleteStore.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteStore.fulfilled, (state, action) => {
+        state.loading = false;
+        state.store = state.store.filter(
+          (store) => store._id != action.payload._id,
+        );
+      })
+      .addCase(deleteStore.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error as string;
+      })
+      .addCase(getStoreById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getStoreById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentStore = action.payload;
+      })
+      .addCase(getStoreById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error as string;
       });
   },
 });

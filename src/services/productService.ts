@@ -48,7 +48,6 @@ export const addBrand = async (formData: FormData) => {
 export const getProduct = async () => {
   try {
     const response = await axios.get(`${serviceURL}/api/products`);
-
     return response.data;
   } catch (error) {
     console.log(error);

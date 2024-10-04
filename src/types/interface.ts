@@ -65,6 +65,7 @@ export interface Store {
 }
 
 export interface StoreState {
+  currentStore: Store | null;
   store: Store[];
   loading: boolean;
   error: string | null;
@@ -204,4 +205,10 @@ export interface PaymentState {
 export interface CheckBoxProp {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
+}
+
+export interface IStoreModal {
+  onClose: () => void;
+  isEdit: boolean;
+  storeId: string;
 }

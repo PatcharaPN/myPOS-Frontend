@@ -7,18 +7,27 @@ import { createPrice, getPrice } from "../../features/PriceSlice";
 import SmallModal from "../../components/Modal/ModalSmall/SmallModal";
 import CustomInput from "../../components/Input/Input";
 import { useTranslation } from "react-i18next"; // Import the hook
+import { handleSingleCheck } from "../../utils/handleSingleCheck";
+import CheckBox from "../../components/CheckBox/CheckBox";
+import { handleCheckAll } from "../../utils/handleCheckbox";
 
 const PriceType = () => {
   const { t } = useTranslation(); // Destructure t from useTranslation hook
   const currentUser = useAppSelector(
-    (state: RootState) => state.auth.currentUser,
+    (state: RootState) => state.auth.currentUser
   );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedItem, setSelectedItem] = useState<Set<string>>(new Set());
+  const itemPerPage = 7;
+  const indexOfLastItem = currentPage * itemPerPage;
+  const itemOfFirstItem = indexOfLastItem - itemPerPage;
   const price = useAppSelector((state: RootState) => state.price.price);
   const [openModal, setOpenModal] = useState(false);
   const dispatch = useAppDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [pricename, setPricename] = useState("");
   const [priceUnit, setPriceUnit] = useState("");
+  const currentItem = price.slice(itemOfFirstItem, indexOfLastItem);
   const [description, setDescription] = useState("");
   useEffect(() => {
     dispatch(getPrice());
@@ -42,8 +51,14 @@ const PriceType = () => {
     dispatch(createPrice(priceData));
     setOpenModal(false);
   };
+  const handleCheck = (id: string) => {
+    handleSingleCheck(id, setSelectedItem);
+  };
+  const handleCheckMany = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleCheckAll(e, currentItem, setSelectedItem);
+  };
   const filteredPrice = price.filter((price) =>
-    price.unit.toLowerCase().includes(searchTerm.toLowerCase()),
+    price.unit.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
     <div>
@@ -69,7 +84,10 @@ const PriceType = () => {
               <thead>
                 <tr>
                   <th>
-                    <input type="checkbox" name="" id="" />
+                    <CheckBox
+                      onChange={handleCheckMany}
+                      checked={selectedItem.size === currentItem.length}
+                    />
                   </th>
                   <th className="align-header">
                     {t("priceUnit")} <Icon icon="octicon:triangle-down-16" />
@@ -99,7 +117,10 @@ const PriceType = () => {
                     key={price._id}
                   >
                     <td>
-                      <input type="checkbox" />
+                      <CheckBox
+                        onChange={() => handleCheck(price._id)}
+                        checked={selectedItem.has(price._id)}
+                      />
                     </td>
                     <td>{price.unit}</td>
                     <td>{price.name}</td>

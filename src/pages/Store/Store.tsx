@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import "./Store.scss";
 import ContainerData from "../../components/ContainerData/ContainerData";
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
-import { getAllStore } from "../../features/StoreSlice";
+import { deleteStore, getAllStore } from "../../features/StoreSlice";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next"; // Import useTranslation hook
 import AddStoreModal from "../../components/Modal/AddStoreModal/AddStoreModal";
@@ -17,34 +17,55 @@ import { handleSingleCheck } from "../../utils/handleSingleCheck";
 const Store = () => {
   const { t } = useTranslation(); // Get translation function
   const store = useAppSelector((state: RootState) => state.store.store);
+  const [isEdit, setIsEdit] = useState(false);
   const dispatch = useAppDispatch();
   const [currentpage, setCurrentpage] = useState<number>(1);
   const serviceURL = import.meta.env.VITE_APP_SERVICE_URL;
   const itemPerPage = 7;
   const [selectedItem, setSelectedItem] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStore, setSelectedStore] = useState("");
   const indexOfLastPayment = currentpage * itemPerPage;
   const indexOfFirstPayment = indexOfLastPayment - itemPerPage;
   const [openModal, setOpenModal] = useState(false);
-  const toggleModal = useCallback(() => {
-    setOpenModal((prev) => !prev);
-  }, []);
 
+  const handleEdit = useCallback((currentProductId: string) => {
+    setSelectedStore(currentProductId);
+    setIsEdit(true);
+    setOpenModal(true);
+  }, []);
+  const handleAddStore = useCallback(() => {
+    setIsEdit(false);
+    setOpenModal(true);
+  }, []);
   useEffect(() => {
     dispatch(getAllStore());
   }, [dispatch]);
-  const filteredStore = store.filter((str) => {
-    if (!str || !str.storename) {
-      return false; // Skip undefined or missing storename
-    }
-    return str.storename.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const filteredStore = Array.isArray(store)
+    ? store.filter((str) => {
+        if (!str || !str.storename) {
+          return false;
+        }
+        return str.storename.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    : [];
   const handleCheckMany = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleCheckAll(e, currentStore, setSelectedItem);
   };
   const currentStore = store.slice(indexOfFirstPayment, indexOfLastPayment);
   const handleCheck = (id: string) => {
     handleSingleCheck(id, setSelectedItem);
+  };
+
+  const deleteStoreById = async (storeId: string) => {
+    try {
+      const result = await dispatch(deleteStore(storeId));
+      if (deleteStore.fulfilled.match(result)) {
+        await dispatch(getAllStore());
+      }
+    } catch (error) {
+      console.error("error while delete store", error);
+    }
   };
   return (
     <div>
@@ -53,7 +74,7 @@ const Store = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         pagename={t("store")}
         Canadd={true}
-        onClickAdd={toggleModal}
+        onClickAdd={handleAddStore}
       >
         <div className="item-list-wrapper">
           {filteredStore.length === 0 ? (
@@ -121,12 +142,12 @@ const Store = () => {
                           <ActionButton
                             icon="uil:edit"
                             className={"edit"}
-                            onClick={() => {}}
+                            onClick={() => handleEdit(items._id)}
                           />
                           <ActionButton
                             icon="material-symbols:delete-outline"
                             className={"delete"}
-                            onClick={() => {}}
+                            onClick={() => deleteStoreById(items._id)}
                           />
                         </div>
                       </div>
@@ -138,7 +159,13 @@ const Store = () => {
           )}
         </div>
       </ContainerData>
-      {openModal && <AddStoreModal onClose={toggleModal} />}
+      {openModal && (
+        <AddStoreModal
+          onClose={() => setOpenModal(false)}
+          isEdit={isEdit}
+          storeId={selectedStore}
+        />
+      )}
     </div>
   );
 };

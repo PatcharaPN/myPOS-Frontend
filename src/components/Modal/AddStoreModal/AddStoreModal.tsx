@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./AddStoreModal.scss";
 import CustomInput from "../../Input/Input";
 import SmallModal from "../ModalSmall/SmallModal";
@@ -8,21 +8,44 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../store/store";
-import { createStore, getAllStore } from "../../../features/StoreSlice";
+import {
+  createStore,
+  getAllStore,
+  getStoreById,
+} from "../../../features/StoreSlice";
 import ImageCircleSelector from "../../ImageCircleSelector/ImageCircleSelector";
+import { IStoreModal, Store } from "../../../types/interface";
 
-const AddStoreModal = ({ onClose }: { onClose: () => void }) => {
+const AddStoreModal = ({ onClose, isEdit, storeId }: IStoreModal) => {
   const { t } = useTranslation(); // Get translation function
   const dispatch = useAppDispatch();
   const [storename, setStoreName] = useState("");
   const [location, setLocation] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentStore, setCurrentStore] = useState<Store | null>(null);
+  const currentItem = useAppSelector(
+    (state: RootState) => state.store.currentStore,
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [file, setFile] = useState<File | null>(null);
   const MAX_FILE_SIZE = 15000000;
   const currentUser = useAppSelector(
     (state: RootState) => state.auth.currentUser,
   );
+  useEffect(() => {
+    const fetchCurrentStore = async () => {
+      if (isEdit && storeId) {
+        try {
+          const storeData = await dispatch(getStoreById(storeId)).unwrap();
+          setCurrentStore(storeData); // storeData is now of type Store
+        } catch (error) {
+          console.error("Failed to fetch store:", error);
+        }
+      }
+    };
+    fetchCurrentStore();
+  }, [dispatch, isEdit, storeId]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,7 +96,11 @@ const AddStoreModal = ({ onClose }: { onClose: () => void }) => {
     <SmallModal header={""} onClose={onClose}>
       <div className="additem-content">
         <div className="additem-topmenu">
-          <h2 style={{ fontWeight: "bold" }}>{t("newStore")}</h2>
+          {isEdit ? (
+            <h2 style={{ fontWeight: "bold" }}>{t("editStore")}</h2>
+          ) : (
+            <h2 style={{ fontWeight: "bold" }}>{t("newStore")}</h2>
+          )}
         </div>
         <div className="additem-form">
           <form className="form-grid" onSubmit={handleSubmit}>
@@ -81,11 +108,17 @@ const AddStoreModal = ({ onClose }: { onClose: () => void }) => {
             <div className="form-layout">
               <CustomInput
                 label={t("name")}
+                placeholder={
+                  isEdit && storeId ? `${currentStore?.storename}` : ""
+                }
                 value={storename}
                 onChange={(e) => setStoreName(e.target.value)}
               />
               <CustomInput
                 label={t("address")}
+                placeholder={
+                  isEdit && storeId ? `${currentStore?.location}` : ""
+                }
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               />

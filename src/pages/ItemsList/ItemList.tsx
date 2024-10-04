@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./ItemList.scss";
-import { Icon } from "@iconify/react/dist/iconify.js";
-
 import { RootState, useAppDispatch, useAppSelector } from "../../store/store";
-import { deleteOne } from "../../features/ProductSlice";
+import { deleteOne, getAllProducts } from "../../features/ProductSlice";
 import { motion } from "framer-motion";
 import ContainerData from "../../components/ContainerData/ContainerData";
 import { useTranslation } from "react-i18next";
@@ -18,6 +16,7 @@ import { handleCheckAll } from "../../utils/handleCheckbox";
 
 const ItemList = () => {
   //const unitType = useAppSelector((state: RootState) => state.unit.unit);
+
   const products = useAppSelector((state: RootState) => state.product.products);
 
   const dispatch = useAppDispatch();
@@ -32,8 +31,14 @@ const ItemList = () => {
   const [searchTerm, setSerchTerm] = useState("");
   const currentProducts = products.slice(
     indexOfFirstPayment,
-    indexOfLastPayment
+    indexOfLastPayment,
   );
+  const fetchAllProducts = useCallback(async () => {
+    await dispatch(getAllProducts());
+  }, []);
+  useEffect(() => {
+    fetchAllProducts();
+  }, [fetchAllProducts]);
 
   const { t } = useTranslation();
 
@@ -47,6 +52,7 @@ const ItemList = () => {
     }
   };
 
+  console.log(products);
   const handleOpenModal = () => {
     setOpenModel(!openModel);
   };
@@ -58,7 +64,7 @@ const ItemList = () => {
   };
 
   const filteredProducts = currentProducts.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleCheckAll(e, currentProducts, setSelectedItem);
